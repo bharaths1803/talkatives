@@ -5,9 +5,9 @@ import { axiosInstance } from "../lib/axios";
 export const useAuthStore = create((set, get) => ({
   authUser: null,
   isCheckingAuth: true,
-  isSigningUp: false,
-  isLoggingIn: false,
-  isLoggingOut: false,
+  isSigningup: false,
+  isLoggingin: false,
+  isLoggingout: false,
 
   checkAuth: async () => {
     try {
@@ -22,42 +22,42 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
-  signup: async (formData) => {
+  signup: async (signupData) => {
     try {
-      set({ isSigningUp: true });
-      const res = await axiosInstance.post("/auth/signup", formData);
+      set({ isSigningup: true });
+      const res = await axiosInstance.post("/auth/signup", signupData);
       set({ authUser: res.data.user });
       toast.success("Account created successfully");
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
-      set({ isSigningUp: false });
+      set({ isSigningup: false });
     }
   },
 
-  login: async (formData) => {
+  login: async (loginData) => {
     try {
-      set({ isLoggingIn: true });
-      const res = await axiosInstance.post("/auth/login", formData);
+      set({ isLoggingin: true });
+      const res = await axiosInstance.post("/auth/login", loginData);
       set({ authUser: res.data.user });
       toast.success("Logged in successfully");
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
-      set({ isLoggingIn: false });
+      set({ isLoggingin: false });
     }
   },
 
   logout: async () => {
     try {
-      set({ isLoggingOut: true });
+      set({ isLoggingout: true });
       const res = await axiosInstance.post("/auth/logout");
       toast.success(res.data.message);
       set({ authUser: null });
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
-      set({ isLoggingOut: false });
+      set({ isLoggingout: false });
     }
   },
 }));

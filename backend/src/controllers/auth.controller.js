@@ -4,8 +4,8 @@ import { generateToken } from "../lib/utils.js";
 
 export const signup = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
-    if (!username || !email || !password) {
+    const { username, firstName, lastName, email, password } = req.body;
+    if (!username || !email || !password || !firstName || !lastName) {
       return res.status(400).json({ message: `All fields are required` });
     }
     if (password.length < 6) {
@@ -13,7 +13,9 @@ export const signup = async (req, res) => {
         .status(400)
         .json({ message: `Password must contain at least 6 characters` });
     }
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({
+      $or: [{ email }, { username }],
+    });
     if (existingUser) {
       return res.status(400).json({ message: `User already exists` });
     }
@@ -22,6 +24,8 @@ export const signup = async (req, res) => {
     const newUser = await User.create({
       username,
       email,
+      firstName,
+      lastName,
       password: hashedPassword,
     });
     if (!newUser) {
@@ -34,6 +38,8 @@ export const signup = async (req, res) => {
         _id: newUser._id,
         username: newUser.username,
         email: newUser.email,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
       },
     });
   } catch (error) {
@@ -44,8 +50,8 @@ export const signup = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) {
+    const { username, email, password } = req.body;
+    if (!email || !username || !password) {
       return res.status(400).json({ message: `All fields are required` });
     }
     const user = await User.findOne({ email });
@@ -59,6 +65,8 @@ export const login = async (req, res) => {
         _id: user._id,
         username: user.username,
         email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
       },
     });
   } catch (error) {
