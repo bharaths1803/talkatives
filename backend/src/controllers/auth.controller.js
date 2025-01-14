@@ -23,13 +23,12 @@ export const signup = async (req, res) => {
       username,
       email,
       password: hashedPassword,
-    }).select("-password");
+    });
     if (!newUser) {
       return res.status(400).json({ message: `Invalid user data` });
     }
-    const newUserId = newUser._id;
-    await newUser.save();
-    generateToken({ newUserId, res });
+    const userId = newUser._id.toString();
+    generateToken({ userId, res });
     res.status(201).json({
       user: {
         _id: newUser._id,
@@ -64,6 +63,18 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     console.log(`Error in signup controller ${error}`);
+    res.status(500).json({ message: `Internal server error` });
+  }
+};
+
+export const logout = async (req, res) => {
+  try {
+    res.cookie("jwt", "", {
+      maxAge: 0,
+    });
+    res.status(200).json({ message: `Logged out successfully` });
+  } catch (error) {
+    console.log(`Error in logout controller ${error}`);
     res.status(500).json({ message: `Internal server error` });
   }
 };
