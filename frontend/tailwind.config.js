@@ -44,6 +44,7 @@ export default {
       colors: {
         lightGrayTransparent: "rgba(217, 217, 217, 0.1)",
         "custom-gray": "rgba(208, 217, 225, 0.1)",
+        "custom-purple": "rgba(199, 191, 218, 1)",
       },
     },
   },

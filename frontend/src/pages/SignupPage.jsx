@@ -55,66 +55,68 @@ const SignupPage = () => {
           />
         </div>
       </div>
-      <div className="w-full lg:w-[50%] flex justify-center items-center">
-        <div className="space-y-4 bg-lightGrayTransparent w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-md xl:max-w-lg 2xl:max-w-xl border border-soft-white rounded-3xl shadow-custom-inset-light backdrop-blur-custom p-3">
-          <Heading label={"Signup"} />
-          <InputBox
-            labelText={"Email"}
-            placeholderText={"you@example.com"}
-            value={signupData.email}
-            onChange={(e) =>
-              setSignupData({ ...signupData, email: e.target.value })
-            }
-          />
-          <div className="flex flex-col md:flex-row md:space-x-2">
+      <div className="w-full lg:w-[50%] mx-auto my-auto">
+        <div className="w-full flex justify-center items-center">
+          <div className="space-y-4 bg-lightGrayTransparent w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-md xl:max-w-lg 2xl:max-w-xl border border-soft-white rounded-3xl shadow-custom-inset-light backdrop-blur-custom p-3">
+            <Heading label={"Signup"} />
             <InputBox
-              labelText={"First Name"}
-              placeholderText={"Taylor"}
-              halfSized={true}
-              value={signupData.firstName}
+              labelText={"Email"}
+              placeholderText={"you@example.com"}
+              value={signupData.email}
               onChange={(e) =>
-                setSignupData({ ...signupData, firstName: e.target.value })
+                setSignupData({ ...signupData, email: e.target.value })
               }
             />
-            <InputBox
-              labelText={"Last Name"}
-              placeholderText={"Swift"}
-              halfSized={true}
-              value={signupData.lastName}
-              onChange={(e) =>
-                setSignupData({ ...signupData, lastName: e.target.value })
-              }
-            />
-          </div>
-          <div className="flex flex-col md:flex-row md:space-x-2">
-            <div className="w-full">
+            <div className="flex flex-col md:flex-row md:space-x-2">
               <InputBox
-                labelText={"Username"}
-                placeholderText={"taylor_swifto2"}
-                value={signupData.username}
+                labelText={"First Name"}
+                placeholderText={"Taylor"}
+                halfSized={true}
+                value={signupData.firstName}
                 onChange={(e) =>
-                  setSignupData({ ...signupData, username: e.target.value })
+                  setSignupData({ ...signupData, firstName: e.target.value })
+                }
+              />
+              <InputBox
+                labelText={"Last Name"}
+                placeholderText={"Swift"}
+                halfSized={true}
+                value={signupData.lastName}
+                onChange={(e) =>
+                  setSignupData({ ...signupData, lastName: e.target.value })
                 }
               />
             </div>
-            <div className="w-full">
-              <InputBox
-                labelText={"Password"}
-                placeholderText={"••••••"}
-                value={signupData.password}
-                onChange={(e) =>
-                  setSignupData({ ...signupData, password: e.target.value })
-                }
+            <div className="flex flex-col md:flex-row md:space-x-2">
+              <div className="w-full">
+                <InputBox
+                  labelText={"Username"}
+                  placeholderText={"taylor_swifto2"}
+                  value={signupData.username}
+                  onChange={(e) =>
+                    setSignupData({ ...signupData, username: e.target.value })
+                  }
+                />
+              </div>
+              <div className="w-full">
+                <InputBox
+                  labelText={"Password"}
+                  placeholderText={"••••••"}
+                  value={signupData.password}
+                  onChange={(e) =>
+                    setSignupData({ ...signupData, password: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+            <div>
+              <Button buttonText={"Create Account"} onClick={handleSignup} />
+              <BottomWarning
+                warningText={"Already have an account?"}
+                navigateToText={"Login"}
+                navigateTo={"/login"}
               />
             </div>
-          </div>
-          <div>
-            <Button buttonText={"Create Account"} onClick={handleSignup} />
-            <BottomWarning
-              warningText={"Already have an account?"}
-              navigateToText={"Login"}
-              navigateTo={"/login"}
-            />
           </div>
         </div>
       </div>

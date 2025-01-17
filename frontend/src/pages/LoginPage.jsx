@@ -38,7 +38,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="w-full h-screen flex bg-custom-gradient">
+    <div className="w-screen h-screen flex bg-custom-gradient">
       <div className="hidden lg:w-[50%] lg:flex justify-center items-center">
         <div className="bg-lightGrayTransparenth p-3">
           <img
@@ -47,40 +47,42 @@ const LoginPage = () => {
           />
         </div>
       </div>
-      <div className="w-full lg:w-[50%] flex justify-center items-center">
-        <div className="space-y-4 bg-lightGrayTransparent w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-md xl:max-w-lg 2xl:max-w-xl border border-soft-white rounded-3xl shadow-custom-inset-light backdrop-blur-custom p-3">
-          <Heading label={"Login"} />
-          <InputBox
-            labelText={"Email"}
-            placeholderText={"you@example.com"}
-            value={loginData.email}
-            onChange={(e) =>
-              setLoginData({ ...loginData, email: e.target.value })
-            }
-          />
-          <InputBox
-            labelText={"Username"}
-            placeholderText={"taylor_swifto"}
-            value={loginData.username}
-            onChange={(e) =>
-              setLoginData({ ...loginData, username: e.target.value })
-            }
-          />
-          <InputBox
-            labelText={"Password"}
-            placeholderText={"••••••"}
-            value={loginData.password}
-            onChange={(e) =>
-              setLoginData({ ...loginData, password: e.target.value })
-            }
-          />
-          <div>
-            <Button buttonText={"Login"} onClick={handleLoggingin} />
-            <BottomWarning
-              warningText={"Don't have an account?"}
-              navigateToText={"Sign Up"}
-              navigateTo={"/signup"}
+      <div className="w-full lg:w-[50%] mx-auto my-auto">
+        <div className="w-full flex justify-center items-center">
+          <div className="space-y-4 bg-lightGrayTransparent w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-md xl:max-w-lg 2xl:max-w-xl border border-soft-white rounded-3xl shadow-custom-inset-light backdrop-blur-custom p-3">
+            <Heading label={"Login"} />
+            <InputBox
+              labelText={"Email"}
+              placeholderText={"you@example.com"}
+              value={loginData.email}
+              onChange={(e) =>
+                setLoginData({ ...loginData, email: e.target.value })
+              }
             />
+            <InputBox
+              labelText={"Username"}
+              placeholderText={"taylor_swifto"}
+              value={loginData.username}
+              onChange={(e) =>
+                setLoginData({ ...loginData, username: e.target.value })
+              }
+            />
+            <InputBox
+              labelText={"Password"}
+              placeholderText={"••••••"}
+              value={loginData.password}
+              onChange={(e) =>
+                setLoginData({ ...loginData, password: e.target.value })
+              }
+            />
+            <div>
+              <Button buttonText={"Login"} onClick={handleLoggingin} />
+              <BottomWarning
+                warningText={"Don't have an account?"}
+                navigateToText={"Sign Up"}
+                navigateTo={"/signup"}
+              />
+            </div>
           </div>
         </div>
       </div>
