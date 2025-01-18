@@ -45,8 +45,11 @@ export default {
         lightGrayTransparent: "rgba(217, 217, 217, 0.1)",
         "custom-gray": "rgba(208, 217, 225, 0.1)",
         "custom-purple": "rgba(199, 191, 218, 1)",
+        "soft-purple": "rgba(161, 150, 185, 1)",
+        "royal-purple": "rgba(144, 122, 192, 1)",
+        "skeleton-purple": "rgba(113, 84, 150, 1)",
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar")],
 };

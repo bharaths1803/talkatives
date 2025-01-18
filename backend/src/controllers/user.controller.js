@@ -3,7 +3,7 @@ import User from "../models/user.model.js";
 
 export const getUsers = async (req, res) => {
   try {
-    let loggedinUserId = new mongoose.Types.ObjectId(req.user._id);
+    let loggedinUserId = req.user._id;
     const users = await User.find({
       _id: { $ne: loggedinUserId },
     }).select("-password");
