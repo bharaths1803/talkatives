@@ -15,7 +15,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="h-full w-full md:w-80 bg-soft-purple flex flex-col">
+    <div className="h-full w-full md:w-80 bg-soft-purple flex flex-col transition-all">
       <div className="p-4 flex-1 overflow-y-auto scrollbar-none">
         {/*Messages heading*/}
         <div className="pointer-events-none">
