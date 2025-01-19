@@ -4,7 +4,14 @@ import { useEffect } from "react";
 import SidebarSkeleton from "../skeletons/SidebarSkeleton";
 
 const Sidebar = () => {
-  const { getUsers, isUsersLoading, users, getSearchedUsers } = useChatStore();
+  const {
+    getUsers,
+    isUsersLoading,
+    users,
+    getSearchedUsers,
+    setSelectedUser,
+    selectedUser,
+  } = useChatStore();
 
   useEffect(() => {
     getUsers();
@@ -12,6 +19,10 @@ const Sidebar = () => {
 
   const handleSearchUsers = (e) => {
     getSearchedUsers(e.target.value);
+  };
+
+  const handleSelectUser = (user) => {
+    setSelectedUser(user);
   };
 
   return (
@@ -47,7 +58,12 @@ const Sidebar = () => {
           {!isUsersLoading &&
             users.length > 0 &&
             users.map((user) => (
-              <button className="w-full flex items-center bg-royal-purple/75 rounded-3xl h-10 p-3 text-black/50 space-x-2 hover:bg-royal-purple active:bg-blue-400">
+              <button
+                className={`w-full flex items-center bg-royal-purple/75 rounded-3xl h-10 p-3 text-black/50 space-x-2 hover:bg-royal-purple ${
+                  selectedUser === user ? "bg-blue-400 pointer-events-none" : ""
+                } active:bg-blue-400`}
+                onClick={() => handleSelectUser(user)}
+              >
                 <CircleUserRound className="size-7" />
                 <p className="text-black">{user.username}</p>
               </button>

@@ -2,7 +2,7 @@ import Message from "../models/message.model.js";
 
 export const getMessages = async (req, res) => {
   try {
-    const { toChatUserId } = req.body;
+    const { toChatUserId } = req.params;
     const currentUserId = req.user._id;
     const messages = await Message.find({
       $or: [

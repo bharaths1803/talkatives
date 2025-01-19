@@ -4,7 +4,10 @@ import { axiosInstance } from "../lib/axios";
 
 export const useChatStore = create((set, get) => ({
   users: [],
+  selectedUser: null,
   isUsersLoading: false,
+  messages: [],
+  isMessagesLoading: false,
 
   getUsers: async () => {
     try {
@@ -24,6 +27,26 @@ export const useChatStore = create((set, get) => ({
       set({ users: res.data.users });
     } catch (error) {
       toast.error(error.response.data.message);
+    }
+  },
+
+  setSelectedUser: (selectedUser) => {
+    set({ selectedUser });
+  },
+
+  sendMessage: async (messageData) => {
+    try {
+      set({ isMessagesLoading: true });
+      const { selectedUser, messages } = get();
+      const message = await axiosInstance.post(
+        `/message/send/${selectedUser._id}`,
+        messageData
+      );
+      set({ messages: [...messages, message] });
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+      set({ isMessagesLoading: false });
     }
   },
 }));

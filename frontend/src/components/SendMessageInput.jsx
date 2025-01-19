@@ -9,9 +9,9 @@ const SendMessageInput = () => {
           placeholder="Type a message"
           className="size-full border-none focus:outline-none bg-transparent placeholder:text-black pl-3"
         />
-        <div>
+        <button>
           <Send className="size-5" />
-        </div>
+        </button>
       </div>
     </div>
   );

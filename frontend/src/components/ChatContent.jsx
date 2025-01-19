@@ -356,6 +356,11 @@ const ChatContent = () => {
           Hi there Hi thereHi thereHi there
         </div>
       </div>
+      <div className="w-full flex justify-start space-x-2 p-2 pl-11">
+        <div className="bg-skeleton-purple p-3 rounded-lg max-w-full">
+          Hi there Hi thereHi thereHi there
+        </div>
+      </div>
       <div className="w-full flex justify-end space-x-2 p-2">
         <div className="bg-skeleton-purple p-3 rounded-lg rounded-tr-none max-w-full">
           Hi there Hi thereHi thereHi there
@@ -364,7 +369,7 @@ const ChatContent = () => {
           <CircleUser className="object-cover" />
         </div>
       </div>
-      <div className="w-full flex justify-end space-x-2 p-2 pr-10">
+      <div className="w-full flex justify-end space-x-2 p-2 pr-11">
         <div className="bg-skeleton-purple p-3 rounded-lg max-w-full">
           Hi there Hi thereHi thereHi there
         </div>
