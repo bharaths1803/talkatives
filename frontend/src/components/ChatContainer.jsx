@@ -12,14 +12,14 @@ const ChatContainer = () => {
   useEffect(() => {
     subscribeToMessages();
     return () => unsubscribeFromMessages();
-  }, [subscribeToMessages, unsubscribeFromMessages]);
+  }, [subscribeToMessages, unsubscribeFromMessages, selectedUser]);
 
   if (!selectedUser) {
     return <NoChatSelected />;
   }
   return (
     <div
-      className={`bg-yellow-600 h-full ${
+      className={`h-full ${
         selectedUser ? "w-full" : "w-0"
       } md:w-full transition-all`}
     >
