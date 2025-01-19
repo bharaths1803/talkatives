@@ -22,6 +22,7 @@ export const sendMessage = async (req, res) => {
     const { receiverId } = req.params;
     const { text } = req.body;
     const senderId = req.user._id;
+    console.log(receiverId, senderId, text);
     const message = await Message.create({
       senderId,
       receiverId,

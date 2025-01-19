@@ -11,6 +11,7 @@ const Sidebar = () => {
     getSearchedUsers,
     setSelectedUser,
     selectedUser,
+    getMessages,
   } = useChatStore();
 
   useEffect(() => {
@@ -23,6 +24,7 @@ const Sidebar = () => {
 
   const handleSelectUser = (user) => {
     setSelectedUser(user);
+    getMessages();
   };
 
   return (
@@ -59,8 +61,11 @@ const Sidebar = () => {
             users.length > 0 &&
             users.map((user) => (
               <button
+                key={user._id}
                 className={`w-full flex items-center bg-royal-purple/75 rounded-3xl h-10 p-3 text-black/50 space-x-2 hover:bg-royal-purple ${
-                  selectedUser === user ? "bg-blue-400 pointer-events-none" : ""
+                  selectedUser === user
+                    ? "bg-purple-400 pointer-events-none"
+                    : ""
                 } active:bg-blue-400`}
                 onClick={() => handleSelectUser(user)}
               >
