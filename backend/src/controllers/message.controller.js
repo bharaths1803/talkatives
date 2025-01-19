@@ -1,3 +1,4 @@
+import { getUserSocketId, io } from "../lib/socket.js";
 import Message from "../models/message.model.js";
 
 export const getMessages = async (req, res) => {
@@ -29,6 +30,11 @@ export const sendMessage = async (req, res) => {
       text,
     });
     await message.save();
+    const receiverSocketId = getUserSocketId(receiverId);
+    if (receiverSocketId) {
+      console.log("Socket and user ids are", receiverSocketId, receiverId);
+      io.to(receiverSocketId).emit("newMessage", message);
+    }
     res.status(200).json({ message });
   } catch (error) {
     console.log(`Error in send messages controller`);
