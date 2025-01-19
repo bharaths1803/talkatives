@@ -17,7 +17,7 @@ const ChatContent = () => {
   }, [messages]);
 
   return (
-    <div className="bg-chat-purple h-5/6 overflow-y-auto p-3 px-5 scrollbar-none">
+    <div className="bg-chat-purple flex-1 overflow-y-auto p-3 px-5 scrollbar-none">
       {isMessagesLoading && <MessageSkeleton />}
       {!isMessagesLoading &&
         messages.length > 0 &&

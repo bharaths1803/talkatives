@@ -11,7 +11,10 @@ const SendMessageInput = () => {
   };
 
   const handleSendMessage = () => {
-    console.log(text);
+    if (!text.trim()) {
+      setText("");
+      return;
+    }
     sendMessage({
       text: text.trim(),
     });
@@ -19,7 +22,7 @@ const SendMessageInput = () => {
   };
 
   return (
-    <div className="bg-search-purple h-max p-2">
+    <div className="bg-search-purple p-2">
       <div className="bg-royal-purple h-12 rounded-full flex justify-center items-center pr-3">
         <input
           type="text"

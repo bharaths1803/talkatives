@@ -19,7 +19,7 @@ const ChatContainer = () => {
   }
   return (
     <div
-      className={`h-full ${
+      className={`h-screen flex flex-col ${
         selectedUser ? "w-full" : "w-0"
       } md:w-full transition-all`}
     >
