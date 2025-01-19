@@ -10,7 +10,7 @@ const Homepage = () => {
   };
 
   return (
-    <div className="h-screen w-screen flex">
+    <div className="h-screen w-screen flex overflow-y-auto">
       <ToggleSidebar />
       <Sidebar />
       <ChatContainer />

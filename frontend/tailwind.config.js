@@ -48,6 +48,8 @@ export default {
         "soft-purple": "rgba(161, 150, 185, 1)",
         "royal-purple": "rgba(144, 122, 192, 1)",
         "skeleton-purple": "rgba(113, 84, 150, 1)",
+        "chat-purple": "rgba(142, 119, 169, 1)",
+        "search-purple": "rgba(175, 164, 217, 1)",
       },
     },
   },
