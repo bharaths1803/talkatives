@@ -32,7 +32,6 @@ export const sendMessage = async (req, res) => {
     await message.save();
     const receiverSocketId = getUserSocketId(receiverId);
     if (receiverSocketId) {
-      console.log("Socket and user ids are", receiverSocketId, receiverId);
       io.to(receiverSocketId).emit("newMessage", message);
     }
     res.status(200).json({ message });

@@ -38,6 +38,10 @@ const SignupPage = () => {
     if (!emailRegex.test(signupData.email)) {
       return toast.error("Invalid email");
     }
+
+    if (signupData.username.length > 16 || signupData.username.length <= 0) {
+      return toast.error("Username can not exceed 16 characters");
+    }
     return true;
   };
 
@@ -64,7 +68,7 @@ const SignupPage = () => {
               placeholderText={"you@example.com"}
               value={signupData.email}
               onChange={(e) =>
-                setSignupData({ ...signupData, email: e.target.value })
+                setSignupData({ ...signupData, email: e.target.value.trim() })
               }
             />
             <div className="flex flex-col md:flex-row md:space-x-2">
@@ -74,7 +78,10 @@ const SignupPage = () => {
                 halfSized={true}
                 value={signupData.firstName}
                 onChange={(e) =>
-                  setSignupData({ ...signupData, firstName: e.target.value })
+                  setSignupData({
+                    ...signupData,
+                    firstName: e.target.value.trim(),
+                  })
                 }
               />
               <InputBox
@@ -83,7 +90,10 @@ const SignupPage = () => {
                 halfSized={true}
                 value={signupData.lastName}
                 onChange={(e) =>
-                  setSignupData({ ...signupData, lastName: e.target.value })
+                  setSignupData({
+                    ...signupData,
+                    lastName: e.target.value.trim(),
+                  })
                 }
               />
             </div>
@@ -94,7 +104,10 @@ const SignupPage = () => {
                   placeholderText={"taylor_swifto2"}
                   value={signupData.username}
                   onChange={(e) =>
-                    setSignupData({ ...signupData, username: e.target.value })
+                    setSignupData({
+                      ...signupData,
+                      username: e.target.value.trim(),
+                    })
                   }
                 />
               </div>

@@ -13,6 +13,11 @@ export const signup = async (req, res) => {
         .status(400)
         .json({ message: `Password must contain at least 6 characters` });
     }
+    if (username.length > 16) {
+      return res
+        .status(400)
+        .json({ message: `User name must not exceed 16 characters` });
+    }
     const existingUser = await User.findOne({
       $or: [{ email }, { username }],
     });
