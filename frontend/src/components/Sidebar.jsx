@@ -2,6 +2,7 @@ import { CircleUserRound, Frown, Search } from "lucide-react";
 import { useChatStore } from "../store/useChatStore";
 import { useEffect } from "react";
 import SidebarSkeleton from "../skeletons/SidebarSkeleton";
+import NoUsersFound from "../skeletons/NoUsersFound";
 
 const Sidebar = () => {
   const {
@@ -46,19 +47,12 @@ const Sidebar = () => {
             placeholder="Search"
             onChange={handleSearchUsers}
           />
-          <div className="flex justify-center items-center hover:cursor-pointer">
+          <div className="flex justify-center items-center">
             <Search className="size-5" />
           </div>
         </div>
         {/*No Users Found*/}
-        {!isUsersLoading && users.length === 0 && (
-          <div className="h-full flex flex-col justify-center items-center">
-            <div className="size-10 flex justify-center items-center animate-bounce rounded-lg text-slate-300">
-              <Frown className="size-8" />
-            </div>
-            <p className="text-red-50">No users found...</p>
-          </div>
-        )}
+        {!isUsersLoading && users.length === 0 && <NoUsersFound />}
         {/*Users*/}
         <div className="mt-6 mx-4 space-y-4">
           {!isUsersLoading &&

@@ -3,6 +3,7 @@ import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
 import { useEffect, useRef } from "react";
 import StartConvesrationWithNewFriend from "../skeletons/StartConversationWithNewFriend.jsx";
+import MessageSkeleton from "../skeletons/MessageSkeleton.jsx";
 
 const ChatContent = () => {
   const { authUser } = useAuthStore();
@@ -16,7 +17,8 @@ const ChatContent = () => {
   }, [messages]);
 
   return (
-    <div className="bg-chat-purple h-5/6 overflow-y-auto p-3 px-5">
+    <div className="bg-chat-purple h-5/6 overflow-y-auto p-3 px-5 scrollbar-none">
+      {isMessagesLoading && <MessageSkeleton />}
       {!isMessagesLoading &&
         messages.length > 0 &&
         messages.map((message, idx) => {
