@@ -27,7 +27,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/message", messageRoutes);
 
-if (true) {
+if (process.env.NODE_ENV !== "development") {
   app.use(express.static(path.join((__dirname, "../frontend/dist"))));
   app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
