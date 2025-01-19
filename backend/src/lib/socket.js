@@ -11,13 +11,20 @@ const io = new Server(server, {
   },
 });
 
+const userSocketMap = {};
+
+export function getUserSocketId(userId) {
+  return userSocketMap[userId];
+}
+
 io.on("connection", (socket) => {
   console.log(`A user connected with socket id${socket.id}`);
-
-  socket.on("connect", () => {});
+  const { userId } = socket.handshake.query;
+  if (userId) userSocketMap[userId] = socket.id;
 
   socket.on("disconnect", () => {
     console.log(`A user disconnected with socket id${socket.id}`);
+    delete userSocketMap[userId];
   });
 });
 
