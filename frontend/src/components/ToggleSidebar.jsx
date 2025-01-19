@@ -44,13 +44,14 @@ const ToggleSidebar = () => {
           )}
         </div>
         <div className="h-[95%] flex flex-col justify-end items-center space-y-7">
+          {/* Profile page navigation
           <Link
             className="flex justify-center items-center text-black/80 hover:bg-slate-400/50 active:bg-slate-400 rounded-full p-2"
             to={"/profile"}
           >
             <CircleUserRound className="size-6" />
             {toggleOpen && <div className="pl-2 text-black">Profile</div>}
-          </Link>
+          </Link> */}
           <button
             className="rotate-180 flex justify-center items-center text-black/80 hover:bg-slate-400/50 active:bg-slate-400 rounded-full p-2"
             onClick={handleLogout}
