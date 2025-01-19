@@ -1,10 +1,18 @@
 import { CircleUser } from "lucide-react";
 import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
+import { useEffect, useRef } from "react";
 
 const ChatContent = () => {
   const { authUser } = useAuthStore();
   const { messages } = useChatStore();
+  const lastMessageRef = useRef();
+
+  useEffect(() => {
+    if (messages && lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behaviour: "smooth" });
+    }
+  }, [messages]);
 
   return (
     <div className="bg-chat-purple h-5/6 overflow-y-auto p-3 px-5">
@@ -26,6 +34,7 @@ const ChatContent = () => {
                   : "pl-11"
                 : ""
             } space-x-2 p-2`}
+            ref={lastMessageRef}
           >
             {isSenderMessage ? (
               <>

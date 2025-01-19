@@ -68,7 +68,7 @@ const Sidebar = () => {
                 key={user._id}
                 className={`w-full flex items-center bg-royal-purple/75 rounded-3xl h-10 p-3 text-black/50 space-x-2 hover:bg-royal-purple ${
                   selectedUser === user
-                    ? "bg-purple-500 pointer-events-none"
+                    ? "bg-skeleton-purple pointer-events-none"
                     : ""
                 } active:bg-blue-400`}
                 onClick={() => handleSelectUser(user)}
