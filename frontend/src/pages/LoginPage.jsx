@@ -5,9 +5,13 @@ import Heading from "../components/Heading";
 import InputBox from "../components/InputBox";
 import { useAuthStore } from "../store/useAuthStore";
 import toast from "react-hot-toast";
+import { Eye, EyeOff } from "lucide-react";
+import PasswordInputBox from "../components/PasswordInputBox";
 
 const LoginPage = () => {
   const { login } = useAuthStore();
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const [loginData, setLoginData] = useState({
     email: "",
@@ -67,13 +71,13 @@ const LoginPage = () => {
                 setLoginData({ ...loginData, username: e.target.value })
               }
             />
-            <InputBox
-              labelText={"Password"}
-              placeholderText={"••••••"}
-              value={loginData.password}
+            <PasswordInputBox
               onChange={(e) =>
                 setLoginData({ ...loginData, password: e.target.value })
               }
+              value={loginData.password}
+              onClick={() => setShowPassword(!showPassword)}
+              showPassword={showPassword}
             />
             <div>
               <Button buttonText={"Login"} onClick={handleLoggingin} />

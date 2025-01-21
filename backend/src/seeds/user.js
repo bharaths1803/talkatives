@@ -150,7 +150,6 @@ let users = [
 
 const seedUsers = async () => {
   try {
-    await User.deleteMany({});
     users = await Promise.all(
       users.map(async (user) => {
         const salt = await bcrypt.genSalt(10);
@@ -170,5 +169,21 @@ const seedUsers = async () => {
     console.log(`Error in seeding users ${error}`);
   }
 };
-connectDB();
-seedUsers();
+
+const deleteTestUsers = async () => {
+  try {
+    await Promise.all(
+      users.map(async (user) => {
+        const username = user.username;
+        await User.deleteMany({ username });
+      })
+    );
+    console.log(`Test users deleted successfully`);
+  } catch (error) {
+    console.log(`Error deleting test usrers ${error}`);
+  }
+};
+
+//connectDB();
+//seedUsers();
+//deleteTestUsers();

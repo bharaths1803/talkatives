@@ -5,9 +5,13 @@ import Heading from "../components/Heading";
 import InputBox from "../components/InputBox";
 import { useAuthStore } from "../store/useAuthStore";
 import toast from "react-hot-toast";
+import { Eye, EyeOff } from "lucide-react";
+import PasswordInputBox from "../components/PasswordInputBox";
 
 const SignupPage = () => {
   const { signup } = useAuthStore();
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const [signupData, setSignupData] = useState({
     firsName: "",
@@ -112,13 +116,13 @@ const SignupPage = () => {
                 />
               </div>
               <div className="w-full">
-                <InputBox
-                  labelText={"Password"}
-                  placeholderText={"••••••"}
-                  value={signupData.password}
+                <PasswordInputBox
                   onChange={(e) =>
                     setSignupData({ ...signupData, password: e.target.value })
                   }
+                  value={signupData.password}
+                  onClick={() => setShowPassword(!showPassword)}
+                  showPassword={showPassword}
                 />
               </div>
             </div>
