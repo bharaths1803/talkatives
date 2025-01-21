@@ -50,6 +50,21 @@ export default {
         "skeleton-purple": "rgba(113, 84, 150, 1)",
         "chat-purple": "rgba(142, 119, 169, 1)",
         "search-purple": "rgba(175, 164, 217, 1)",
+        "not-found-purple": "rgba(168, 152, 201, 1)",
+      },
+      keyframes: {
+        "smooth-bounce": {
+          "0%": { transform: "translateY(-20%)" },
+          "50%": { transform: "translateY(0)" },
+          "75%": { transform: "translateY(-7.5%)" },
+          "100%": {
+            transform: "translateY(0)",
+            animationTimingFunction: "ease-out",
+          },
+        },
+      },
+      animation: {
+        "bounce-once": "smooth-bounce 1s ease-in-out",
       },
     },
   },

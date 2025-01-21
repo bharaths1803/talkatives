@@ -7,6 +7,7 @@ import { useAuthStore } from "./store/useAuthStore";
 import { useEffect } from "react";
 import { Loader } from "lucide-react";
 import ProfilePage from "./pages/ProfilePage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   const { checkAuth, authUser, isCheckingAuth } = useAuthStore();
@@ -36,6 +37,7 @@ function App() {
           path="/"
           element={authUser ? <ChatPage /> : <Navigate to="/login" />}
         />
+        <Route path="*" element={<NotFoundPage />} />
         {/* Profile page routing  
         <Route
           path="/profile"
