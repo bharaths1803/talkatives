@@ -31,3 +31,26 @@ export const getSearchedUsers = async (req, res) => {
     res.status(500).json({ message: `Internal server error` });
   }
 };
+
+export const updateProfilePic = async (req, res) => {
+  try {
+    const { profilePic } = req.body;
+    const loggedinUserId = req.user._id;
+    if (!profilePic) {
+      return res.status(400).json({ message: `Upload a profile picture` });
+    }
+    const result = await cloudinary.uploader.upload(profilePic);
+    const profilePicUrl = result.secure_url;
+    const updatedUser = await User.findByIdAndUpdate(
+      loggedinUserId,
+      {
+        profilePicUrl,
+      },
+      { new: true }
+    );
+    res.status(201).json({ user: updatedUser });
+  } catch (error) {
+    console.log(`Error in update profile pic controller`);
+    res.status(500).json({ message: `Internal server error` });
+  }
+};
