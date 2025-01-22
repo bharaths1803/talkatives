@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import User from "../models/user.model.js";
+import cloudinary from "../lib/cloudinary.js";
 
 export const getUsers = async (req, res) => {
   try {
