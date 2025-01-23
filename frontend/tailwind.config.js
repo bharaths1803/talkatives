@@ -25,10 +25,16 @@ export default {
 
         "custom-btn1": "0px 1px 3px 1px rgba(0, 0, 0, 0.15)",
         "custom-btn2": "0px 1px 2px 0px rgba(0, 0, 0, 0.3)",
+
+        "custom-inset-1":
+          "-26.3px 26.3px 26.3px 0px rgba(255, 255, 255, 0.1) inset",
+        "custom-inset-2":
+          "26.3px -26.3px 26.3px 0px rgba(110, 93, 146, 0.1) inset",
       },
       backdropBlur: {
         custom: "87.2px",
         "custom-btn": "32px",
+        "custom-blur": "52.6px",
       },
       backgroundImage: {
         "custom-gradient":
@@ -51,6 +57,7 @@ export default {
         "chat-purple": "rgba(142, 119, 169, 1)",
         "search-purple": "rgba(175, 164, 217, 1)",
         "not-found-purple": "rgba(168, 152, 201, 1)",
+        "about-purple": "rgba(144, 122, 192, 0.1)",
       },
       keyframes: {
         "smooth-bounce": {

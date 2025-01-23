@@ -45,6 +45,7 @@ export const signup = async (req, res) => {
         email: newUser.email,
         firstName: newUser.firstName,
         lastName: newUser.lastName,
+        updatedAt: newUser.updatedAt,
       },
     });
   } catch (error) {
@@ -72,6 +73,7 @@ export const login = async (req, res) => {
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
+        updatedAt: user.updatedAt,
       },
     });
   } catch (error) {

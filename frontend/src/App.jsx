@@ -37,12 +37,11 @@ function App() {
           path="/"
           element={authUser ? <ChatPage /> : <Navigate to="/login" />}
         />
-        <Route path="*" element={<NotFoundPage />} />
-        {/* Profile page routing  
         <Route
           path="/profile"
           element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
-        /> */}
+        />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Toaster />
     </>

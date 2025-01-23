@@ -54,3 +54,22 @@ export const updateProfilePic = async (req, res) => {
     res.status(500).json({ message: `Internal server error` });
   }
 };
+
+export const updateDescription = async (req, res) => {
+  try {
+    const { description } = req.body;
+    console.log(description);
+    const loggedinUserId = req.user._id;
+    const updatedUser = await User.findByIdAndUpdate(
+      loggedinUserId,
+      {
+        description,
+      },
+      { new: true }
+    );
+    res.status(201).json({ user: updatedUser });
+  } catch (error) {
+    console.log(`Error in update description controller`);
+    res.status(500).json({ message: `Internal server error` });
+  }
+};
