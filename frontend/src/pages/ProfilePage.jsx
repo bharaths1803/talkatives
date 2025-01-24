@@ -18,9 +18,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     checkAuth();
-    if (authUser.description) {
-      setDescription((desc) => (desc = authUser.description));
-    }
+    setDescription(authUser.description);
   }, []);
 
   useEffect(() => {
@@ -135,7 +133,7 @@ const ProfilePage = () => {
                 {isEditingDescription ? (
                   <input
                     className="py-2 pl-3 pr-10 w-full flex justify-center items-center border-none bg-transparent focus:outline-none"
-                    value={description}
+                    value={description || authUser.description}
                     onChange={(e) => setDescription(e.target.value)}
                     ref={descriptionInputBoxRef}
                   />
