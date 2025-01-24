@@ -19,7 +19,8 @@ const ProfilePage = () => {
   useEffect(() => {
     checkAuth();
     setDescription(authUser.description);
-  }, []);
+    return () => checkAuth();
+  }, [updateProfile]);
 
   useEffect(() => {
     if (isEditingDescription && descriptionInputBoxRef.current) {
