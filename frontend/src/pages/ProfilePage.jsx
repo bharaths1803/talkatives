@@ -18,7 +18,9 @@ const ProfilePage = () => {
 
   useEffect(() => {
     checkAuth();
-    setDescription(authUser.description);
+    if (authUser.description) {
+      setDescription((desc) => (desc = authUser.description));
+    }
   }, []);
 
   useEffect(() => {
@@ -139,7 +141,7 @@ const ProfilePage = () => {
                   />
                 ) : (
                   <div className="pl-4 py-3 pr-9 flex justify-center items-center border-none bg-transparent focus:outline-none">
-                    {description}
+                    {description || authUser.description}
                   </div>
                 )}
                 <button

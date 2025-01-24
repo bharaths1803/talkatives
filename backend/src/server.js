@@ -16,12 +16,12 @@ const __dirname = path.resolve();
 
 app.use(
   express.json({
-    limit: "10mb",
+    limit: "2mb",
   })
 );
 app.use(
   express.urlencoded({
-    limit: "10mb",
+    limit: "2mb",
     extended: true,
   })
 );
