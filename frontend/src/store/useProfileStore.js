@@ -4,21 +4,19 @@ import { axiosInstance } from "../lib/axios";
 import { useAuthStore } from "./useAuthStore";
 
 export const useProfileStore = create((set, get) => ({
-  isUpdatingDescription: false,
+  isUpdatingProfile: false,
 
-  updateDescription: async (description) => {
+  updateProfile: async (updateData) => {
     try {
-      set({ isUpdatingDescription: true });
-      const res = await axiosInstance.put("/users/update-description", {
-        description,
-      });
+      set({ isUpdatingProfile: true });
+      const res = await axiosInstance.put("/users/update-profile", updateData);
       const { authUser } = useAuthStore.getState();
       set({ authUser: res.data.user });
-      toast.success("Updated description successfully!");
+      toast.success("Updated profile successfully!");
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
-      set({ isUpdatingDescription: false });
+      set({ isUpdatingProfile: false });
     }
   },
 }));

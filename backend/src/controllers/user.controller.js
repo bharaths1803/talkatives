@@ -32,44 +32,26 @@ export const getSearchedUsers = async (req, res) => {
   }
 };
 
-export const updateProfilePic = async (req, res) => {
+export const updateProfile = async (req, res) => {
   try {
-    const { profilePic } = req.body;
+    const { profilePic, description } = req.body;
     const loggedinUserId = req.user._id;
-    if (!profilePic) {
-      return res.status(400).json({ message: `Upload a profile picture` });
+    let profilePicUrl;
+    if (profilePic) {
+      const result = await cloudinary.uploader.upload(profilePic);
+      profilePicUrl = result.secure_url;
     }
-    const result = await cloudinary.uploader.upload(profilePic);
-    const profilePicUrl = result.secure_url;
     const updatedUser = await User.findByIdAndUpdate(
       loggedinUserId,
       {
         profilePicUrl,
-      },
-      { new: true }
-    );
-    res.status(201).json({ user: updatedUser });
-  } catch (error) {
-    console.log(`Error in update profile pic controller`);
-    res.status(500).json({ message: `Internal server error` });
-  }
-};
-
-export const updateDescription = async (req, res) => {
-  try {
-    const { description } = req.body;
-    console.log(description);
-    const loggedinUserId = req.user._id;
-    const updatedUser = await User.findByIdAndUpdate(
-      loggedinUserId,
-      {
         description,
       },
       { new: true }
     );
     res.status(201).json({ user: updatedUser });
   } catch (error) {
-    console.log(`Error in update description controller`);
+    console.log(`Error in update profile controller`);
     res.status(500).json({ message: `Internal server error` });
   }
 };
