@@ -22,9 +22,12 @@ const SendMessageInput = () => {
         setEmojiPickerOpen(false);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
 
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   useEffect(() => {
@@ -36,12 +39,14 @@ const SendMessageInput = () => {
     setText(e.target.value);
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = (e) => {
+    e.preventDefault();
     if (!text.trim() && !image) {
       setText("");
       setImage(null);
       return;
     }
+    console.log(text.trim());
     sendMessage({
       text: text.trim(),
       image: image,
@@ -50,7 +55,8 @@ const SendMessageInput = () => {
     setImage(null);
   };
 
-  const handleToggleEmojiPicker = () => {
+  const handleToggleEmojiPicker = (e) => {
+    e.preventDefault();
     setEmojiPickerOpen(!emojiPickerOpen);
   };
 
@@ -87,16 +93,21 @@ const SendMessageInput = () => {
 
   return (
     <div className="bg-search-purple p-2 relative">
-      <div className="bg-royal-purple h-12 rounded-full flex justify-center items-center pr-3 relative pl-2">
+      <form
+        className="bg-royal-purple h-12 rounded-full flex justify-center items-center pr-3 relative pl-2"
+        onSubmit={handleSendMessage}
+      >
         <button
           className="hidden md:block text-black/80 hover:bg-slate-400/50 active:bg-slate-400 rounded-full p-2"
           onClick={handleToggleEmojiPicker}
+          type="button"
         >
           <Smile className="size-6" />
         </button>
         <button
           className=" text-black/80 hover:bg-slate-400/50 active:bg-slate-400 rounded-full p-2"
           onClick={handleImageUpload}
+          type="button"
         >
           <ImageUp className="size-6" />
         </button>
@@ -118,7 +129,7 @@ const SendMessageInput = () => {
             <EmojiPicker onEmojiClick={handleEmojiSelect} />
           </div>
         )}
-      </div>
+      </form>
       <div
         className={`${
           image ? "absolute" : "hidden"
