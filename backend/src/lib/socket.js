@@ -28,14 +28,14 @@ io.on("connection", (socket) => {
   socket.on("typing", (receiverId) => {
     const receiverSocketId = getUserSocketId(receiverId);
     if (receiverSocketId) {
-      io.to(receiverSocketId).emit("typing");
+      io.to(receiverSocketId).emit("typing", userId);
     }
   });
 
   socket.on("stop-typing", (receiverId) => {
     const receiverSocketId = getUserSocketId(receiverId);
     if (receiverSocketId) {
-      io.to(receiverSocketId).emit("stop-typing");
+      io.to(receiverSocketId).emit("stop-typing", userId);
     }
   });
 });

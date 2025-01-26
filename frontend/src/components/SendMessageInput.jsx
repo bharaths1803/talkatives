@@ -3,15 +3,19 @@ import { useEffect, useRef, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
 import EmojiPicker from "emoji-picker-react";
 import toast from "react-hot-toast";
+import { useAuthStore } from "../store/useAuthStore";
 
 const SendMessageInput = () => {
-  const { sendMessage } = useChatStore();
-  const { selectedUser } = useChatStore();
+  const { selectedUser, sendMessage, isTyping, unsetIsTyping } = useChatStore();
+  const { socket } = useAuthStore();
   const [text, setText] = useState("");
   const [image, setImage] = useState(null);
   const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
   const emojiPickerRef = useRef();
   const imageUploadInputBoxRef = useRef(null);
+
+  const TIME_DELAY = 2000;
+  let timeout;
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -37,6 +41,13 @@ const SendMessageInput = () => {
 
   const handleMessageTyping = (e) => {
     setText(e.target.value);
+    socket.emit("typing", selectedUser._id);
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(() => {
+      socket.emit("stop-typing", selectedUser._id);
+    }, TIME_DELAY);
   };
 
   const handleSendMessage = (e) => {
@@ -46,13 +57,13 @@ const SendMessageInput = () => {
       setImage(null);
       return;
     }
-    console.log(text.trim());
     sendMessage({
       text: text.trim(),
       image: image,
     });
     setText("");
     setImage(null);
+    socket.emit("stop-typing", selectedUser._id);
   };
 
   const handleToggleEmojiPicker = (e) => {

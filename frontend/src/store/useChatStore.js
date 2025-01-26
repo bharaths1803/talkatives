@@ -9,6 +9,7 @@ export const useChatStore = create((set, get) => ({
   isUsersLoading: false,
   messages: [],
   isMessagesLoading: false,
+  isTyping: false,
 
   getUsers: async () => {
     try {
@@ -88,5 +89,30 @@ export const useChatStore = create((set, get) => ({
     } catch (error) {
       console.log(`Failed subscribing to messages`);
     }
+  },
+
+  setIsTyping: (isTyping) => {
+    set({ isTyping });
+  },
+
+  subscribeToTypingEvents: () => {
+    const { selectedUser } = get();
+    const { socket } = useAuthStore.getState();
+    socket.on("typing", (userId) => {
+      if (userId === selectedUser._id) {
+        setIsTyping(true);
+      }
+    });
+    socket.on("stop-typing", (userId) => {
+      if (userId === selectedUser._id) {
+        setIsTyping(false);
+      }
+    });
+  },
+
+  unsubscribeFromTypingEvents: () => {
+    const { socket } = useAuthStore.getState();
+    socket.off("typing");
+    socket.off("stop-typing");
   },
 }));

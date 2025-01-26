@@ -1,13 +1,19 @@
 import { CircleUser } from "lucide-react";
 import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import StartConvesrationWithNewFriend from "../skeletons/StartConversationWithNewFriend.jsx";
 import MessageSkeleton from "../skeletons/MessageSkeleton.jsx";
 
 const ChatContent = () => {
   const { authUser } = useAuthStore();
-  const { messages, isMessagesLoading } = useChatStore();
+  const {
+    messages,
+    isMessagesLoading,
+    isTyping,
+    subscribeToTypingEvents,
+    unsubscribeFromTypingEvents,
+  } = useChatStore();
   const lastMessageRef = useRef();
 
   useEffect(() => {
@@ -15,6 +21,11 @@ const ChatContent = () => {
       lastMessageRef.current.scrollIntoView({ behaviour: "smooth" });
     }
   }, [messages]);
+
+  useEffect(() => {
+    subscribeToTypingEvents();
+    return () => unsubscribeFromTypingEvents();
+  }, []);
 
   return (
     <div className="bg-chat-purple flex-1 overflow-y-auto p-3 px-5 scrollbar-none">
@@ -106,6 +117,16 @@ const ChatContent = () => {
             </div>
           );
         })}
+      {isTyping && (
+        <div
+          className={`w-full flex justify-start pl-11 space-x-2 p-2`}
+          ref={lastMessageRef}
+        >
+          <div className="bg-skeleton-purple p-2 rounded-lg rounded-tl-none max-w-full">
+            Typing ...
+          </div>
+        </div>
+      )}
       {!isMessagesLoading && messages.length == 0 && (
         <StartConvesrationWithNewFriend />
       )}
