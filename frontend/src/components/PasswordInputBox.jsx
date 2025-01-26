@@ -17,6 +17,7 @@ const PasswordInputBox = ({ onChange, value, onClick, showPassword }) => {
         <button
           className={`hover:bg-blue-400/50 active:bg-blue-400 rounded-full p-2 text-black/75`}
           onClick={onClick}
+          type="button"
         >
           {showPassword ? (
             <Eye className="size-6" />

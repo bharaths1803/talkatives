@@ -24,20 +24,24 @@ const LoginPage = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (!loginData.email || !loginData.username || !loginData.password) {
-      return toast.error("All fields are required");
+      toast.error("All fields are required");
+      return false;
     }
     if (!passwordRegex.test(loginData.password)) {
-      return toast.error(
+      toast.error(
         "Password must contain at least 3 characters, 1 uppercase, 1 lowercase, 1 special character, and 1 digit"
       );
+      return false;
     }
     if (!emailRegex.test(loginData.email)) {
-      return toast.error("Invalid email");
+      toast.error("Invalid email");
+      return false;
     }
     return true;
   };
 
-  const handleLoggingin = () => {
+  const handleLoggingin = (e) => {
+    e.preventDefault();
     if (isValidLoginData()) login(loginData);
   };
 
@@ -53,30 +57,39 @@ const LoginPage = () => {
       </div>
       <div className="w-full lg:w-[50%] mx-auto my-auto">
         <div className="w-full flex justify-center items-center">
-          <div className="space-y-4 bg-lightGrayTransparent w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-md xl:max-w-lg 2xl:max-w-xl border border-soft-white rounded-3xl shadow-custom-inset-light backdrop-blur-custom p-3">
+          <form
+            className="space-y-4 bg-lightGrayTransparent w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-md xl:max-w-lg 2xl:max-w-xl border border-soft-white rounded-3xl shadow-custom-inset-light backdrop-blur-custom p-3"
+            onSubmit={handleLoggingin}
+          >
             <Heading label={"Login"} />
             <InputBox
               labelText={"Email"}
               placeholderText={"you@example.com"}
               value={loginData.email}
-              onChange={(e) =>
-                setLoginData({ ...loginData, email: e.target.value })
-              }
+              onChange={(e) => {
+                e.preventDefault();
+                setLoginData({ ...loginData, email: e.target.value });
+              }}
             />
             <InputBox
               labelText={"Username"}
               placeholderText={"taylor_swifto"}
               value={loginData.username}
-              onChange={(e) =>
-                setLoginData({ ...loginData, username: e.target.value })
-              }
+              onChange={(e) => {
+                e.preventDefault();
+                setLoginData({ ...loginData, username: e.target.value });
+              }}
             />
             <PasswordInputBox
-              onChange={(e) =>
-                setLoginData({ ...loginData, password: e.target.value })
-              }
+              onChange={(e) => {
+                e.preventDefault();
+                setLoginData({ ...loginData, password: e.target.value });
+              }}
               value={loginData.password}
-              onClick={() => setShowPassword(!showPassword)}
+              onClick={(e) => {
+                e.preventDefault();
+                setShowPassword(!showPassword);
+              }}
               showPassword={showPassword}
             />
             <div>
@@ -87,7 +100,7 @@ const LoginPage = () => {
                 navigateTo={"/signup"}
               />
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>

@@ -32,24 +32,29 @@ const SignupPage = () => {
       !signupData.username ||
       !signupData.password
     ) {
-      return toast.error("All fields are required");
+      toast.error("All fields are required");
+      return false;
     }
     if (!passwordRegex.test(signupData.password)) {
-      return toast.error(
+      toast.error(
         "Password must contain at least 3 characters, 1 uppercase, 1 lowercase, 1 special character, and 1 digit"
       );
+      return false;
     }
     if (!emailRegex.test(signupData.email)) {
-      return toast.error("Invalid email");
+      toast.error("Invalid email");
+      return false;
     }
 
     if (signupData.username.length > 16 || signupData.username.length <= 0) {
-      return toast.error("Username can not exceed 16 characters");
+      toast.error("Username can not exceed 16 characters");
+      return false;
     }
     return true;
   };
 
-  const handleSignup = () => {
+  const handleSignup = (e) => {
+    e.preventDefault();
     if (isValidSignupData()) signup(signupData);
   };
 
@@ -65,15 +70,19 @@ const SignupPage = () => {
       </div>
       <div className="w-full lg:w-[50%] mx-auto my-auto">
         <div className="w-full flex justify-center items-center">
-          <div className="space-y-4 bg-lightGrayTransparent w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-md xl:max-w-lg 2xl:max-w-xl border border-soft-white rounded-3xl shadow-custom-inset-light backdrop-blur-custom p-3">
+          <form
+            className="space-y-4 bg-lightGrayTransparent w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-md xl:max-w-lg 2xl:max-w-xl border border-soft-white rounded-3xl shadow-custom-inset-light backdrop-blur-custom p-3"
+            onSubmit={handleSignup}
+          >
             <Heading label={"Signup"} />
             <InputBox
               labelText={"Email"}
               placeholderText={"you@example.com"}
               value={signupData.email}
-              onChange={(e) =>
-                setSignupData({ ...signupData, email: e.target.value.trim() })
-              }
+              onChange={(e) => {
+                e.preventDefault();
+                setSignupData({ ...signupData, email: e.target.value.trim() });
+              }}
             />
             <div className="flex flex-col md:flex-row md:space-x-2">
               <InputBox
@@ -81,24 +90,26 @@ const SignupPage = () => {
                 placeholderText={"Taylor"}
                 halfSized={true}
                 value={signupData.firstName}
-                onChange={(e) =>
+                onChange={(e) => {
+                  e.preventDefault();
                   setSignupData({
                     ...signupData,
                     firstName: e.target.value.trim(),
-                  })
-                }
+                  });
+                }}
               />
               <InputBox
                 labelText={"Last Name"}
                 placeholderText={"Swift"}
                 halfSized={true}
                 value={signupData.lastName}
-                onChange={(e) =>
+                onChange={(e) => {
+                  e.preventDefault();
                   setSignupData({
                     ...signupData,
                     lastName: e.target.value.trim(),
-                  })
-                }
+                  });
+                }}
               />
             </div>
             <div className="flex flex-col md:flex-row md:space-x-2">
@@ -107,19 +118,21 @@ const SignupPage = () => {
                   labelText={"Username"}
                   placeholderText={"taylor_swifto2"}
                   value={signupData.username}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    e.preventDefault();
                     setSignupData({
                       ...signupData,
                       username: e.target.value.trim(),
-                    })
-                  }
+                    });
+                  }}
                 />
               </div>
               <div className="w-full">
                 <PasswordInputBox
-                  onChange={(e) =>
-                    setSignupData({ ...signupData, password: e.target.value })
-                  }
+                  onChange={(e) => {
+                    e.preventDefault();
+                    setSignupData({ ...signupData, password: e.target.value });
+                  }}
                   value={signupData.password}
                   onClick={() => setShowPassword(!showPassword)}
                   showPassword={showPassword}
@@ -134,7 +147,7 @@ const SignupPage = () => {
                 navigateTo={"/login"}
               />
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>
