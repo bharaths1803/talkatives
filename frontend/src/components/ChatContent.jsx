@@ -75,7 +75,9 @@ const ChatContent = () => {
                         />
                       </div>
                     )}
-                    {message.text}
+                    <div>
+                      <p className="max-w-fit break-all"> {message.text}</p>
+                    </div>
                   </div>
                   {isStartingMessageOfNewContiguousSequence && (
                     <div className="size-7">
@@ -110,7 +112,9 @@ const ChatContent = () => {
                         />
                       </div>
                     )}
-                    {message.text}
+                    <div>
+                      <p className="max-w-fit break-all"> {message.text}</p>
+                    </div>
                   </div>
                 </>
               )}
