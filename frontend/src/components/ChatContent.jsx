@@ -80,12 +80,25 @@ const ChatContent = () => {
                     </div>
                   )}
                   <div
-                    className={`bg-skeleton-purple p-3 rounded-lg ${
+                    className={`${
+                      message.imageUrl && !message.text
+                        ? ""
+                        : "bg-skeleton-purple"
+                    } p-3 rounded-lg ${
                       isStartingMessageOfNewContiguousSequence
                         ? "rounded-tl-none"
                         : ""
                     } max-w-full`}
                   >
+                    {message.imageUrl && (
+                      <div className="w-full flex justify-start">
+                        <img
+                          src={message.imageUrl}
+                          alt="Message image "
+                          className="size-28"
+                        />
+                      </div>
+                    )}
                     {message.text}
                   </div>
                 </>

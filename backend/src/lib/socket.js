@@ -24,6 +24,20 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     delete userSocketMap[userId];
   });
+
+  socket.on("typing", (receiverId) => {
+    const receiverSocketId = getUserSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("typing");
+    }
+  });
+
+  socket.on("stop-typing", (receiverId) => {
+    const receiverSocketId = getUserSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("stop-typing");
+    }
+  });
 });
 
 export { io, app, server };
