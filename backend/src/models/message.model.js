@@ -15,6 +15,10 @@ const messageSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  imageUrl: {
+    type: String,
+    required: false,
+  },
 });
 
 const Message = mongoose.model("Message", messageSchema);
