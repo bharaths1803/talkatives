@@ -60,14 +60,26 @@ const Sidebar = () => {
             users.map((user) => (
               <button
                 key={user._id}
-                className={`w-full flex items-center bg-royal-purple/75 rounded-3xl h-10 p-3 text-black/50 space-x-2 hover:bg-royal-purple ${
+                className={`w-full flex items-center bg-royal-purple/75 rounded-3xl h-10 p-3 ${
+                  user.profilePicUrl ? "pl-0" : ""
+                } text-black/50 space-x-2 hover:bg-royal-purple ${
                   selectedUser === user
                     ? "bg-skeleton-purple pointer-events-none"
                     : ""
                 } active:bg-blue-400`}
                 onClick={() => handleSelectUser(user)}
               >
-                <CircleUserRound className="size-7" />
+                {user.profilePicUrl ? (
+                  <div className="size-10">
+                    <img
+                      src={user.profilePicUrl}
+                      alt="User profile pic"
+                      className="size-full rounded-full"
+                    />
+                  </div>
+                ) : (
+                  <CircleUserRound className="size-7" />
+                )}
                 <p className="text-black">{user.username}</p>
               </button>
             ))}
