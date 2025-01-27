@@ -100,13 +100,11 @@ export const useChatStore = create((set, get) => ({
     const { socket } = useAuthStore.getState();
     socket.on("typing", (userId) => {
       if (userId === selectedUser._id) {
-        console.log("Inside typing if");
         get().setIsTyping(true);
       }
     });
     socket.on("stop-typing", (userId) => {
       if (userId === selectedUser._id) {
-        console.log("Inside stop-typing if");
         get().setIsTyping(false);
       }
     });
@@ -114,6 +112,7 @@ export const useChatStore = create((set, get) => ({
 
   unsubscribeFromTypingEvents: () => {
     const { socket } = useAuthStore.getState();
+    if (!socket) return;
     socket.off("typing");
     socket.off("stop-typing");
   },

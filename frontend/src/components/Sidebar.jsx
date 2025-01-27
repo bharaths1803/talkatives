@@ -34,9 +34,9 @@ const Sidebar = () => {
         !selectedUser ? "w-full" : "w-0"
       } md:w-80 bg-soft-purple flex flex-col transition-all`}
     >
-      <div className="p-4 flex-1 overflow-y-auto scrollbar-none">
+      <div className="py-4 px-0 flex-1 overflow-y-auto scrollbar-none">
         {/*Messages heading*/}
-        <div className="pointer-events-none">
+        <div className="pointer-events-none pl-2">
           <h1 className="font-inter font-bold text-3xl">Messages</h1>
         </div>
         {/*Users search bar*/}
@@ -54,23 +54,21 @@ const Sidebar = () => {
         {/*No Users Found*/}
         {!isUsersLoading && users.length === 0 && <NoUsersFound />}
         {/*Users*/}
-        <div className="mt-6 mx-4 space-y-4">
+        <div className="mt-6 mx-1 space-y-1">
           {!isUsersLoading &&
             users.length > 0 &&
             users.map((user) => (
               <button
                 key={user._id}
-                className={`w-full flex items-center bg-royal-purple/75 rounded-3xl h-10 p-3 ${
-                  user.profilePicUrl ? "pl-0" : ""
-                } text-black/50 space-x-2 hover:bg-royal-purple ${
+                className={`w-full flex items-center h-14 pl-0 py-6 text-black/50 space-x-2 hover:bg-royal-purple ${
                   selectedUser === user
                     ? "bg-skeleton-purple pointer-events-none"
                     : ""
-                } active:bg-blue-400`}
+                } active:bg-blue-400 space-x-3 rounded-lg`}
                 onClick={() => handleSelectUser(user)}
               >
                 {user.profilePicUrl ? (
-                  <div className="size-10">
+                  <div className="size-10 ml-2">
                     <img
                       src={user.profilePicUrl}
                       alt="User profile pic"
@@ -78,7 +76,7 @@ const Sidebar = () => {
                     />
                   </div>
                 ) : (
-                  <CircleUserRound className="size-7" />
+                  <CircleUserRound className="size-12 pl-2" />
                 )}
                 <p className="text-black">{user.username}</p>
               </button>

@@ -76,6 +76,7 @@ const ProfilePage = () => {
   };
 
   function formatDateToMonthYear(dateString) {
+    if (!dateString) return "Jan 2025";
     const date = new Date(dateString);
     const options = { month: "short", year: "numeric" };
     return date.toLocaleDateString("en-US", options);
@@ -126,7 +127,7 @@ const ProfilePage = () => {
           <div className="w-full flex-col flex justify-center items-center p-3 space-y-4 mt-10 md:mt-20 lg:mt-24">
             <h2 className="text-4xl font-bold">{`${authUser.firstName} ${authUser.lastName}`}</h2>
             <p className="text-base">
-              Talkative since {formatDateToMonthYear(authUser.updatedAt)}
+              Talkative since {formatDateToMonthYear(authUser.createdAt)}
             </p>
             <div className="space-y-3 max-w-full">
               <p className="">Who am I?</p>

@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  blockOrUnblockUser,
   getSearchedUsers,
   getUsers,
   updateProfile,
@@ -10,4 +11,9 @@ const router = express.Router();
 router.get("/", protectRoute, getUsers);
 router.get("/bulk", protectRoute, getSearchedUsers);
 router.put("/update-profile", protectRoute, updateProfile);
+router.put(
+  "/block-or-unblock/:toBlockOrUnBlockUserId",
+  protectRoute,
+  blockOrUnblockUser
+);
 export default router;

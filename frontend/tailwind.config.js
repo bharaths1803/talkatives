@@ -57,7 +57,10 @@ export default {
         "chat-purple": "rgba(142, 119, 169, 1)",
         "search-purple": "rgba(175, 164, 217, 1)",
         "not-found-purple": "rgba(168, 152, 201, 1)",
-        "about-purple": "rgba(144, 122, 192, 0.1)",
+        "about-purple": {
+          10: "rgba(144, 122, 192, 0.1)",
+          30: "rgba(144, 122, 192, 0.3)",
+        },
       },
       keyframes: {
         "smooth-bounce": {

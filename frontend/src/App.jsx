@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { Loader } from "lucide-react";
 import ProfilePage from "./pages/ProfilePage";
 import NotFoundPage from "./pages/NotFoundPage";
+import ViewProfilePage from "./pages/ViewProfilePage";
 
 function App() {
   const { checkAuth, authUser, isCheckingAuth } = useAuthStore();
@@ -40,6 +41,10 @@ function App() {
         <Route
           path="/profile"
           element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/view-profile"
+          element={authUser ? <ViewProfilePage /> : <Navigate to="/login" />}
         />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

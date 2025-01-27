@@ -4,10 +4,15 @@ import { useChatStore } from "../store/useChatStore";
 import EmojiPicker from "emoji-picker-react";
 import toast from "react-hot-toast";
 import { useAuthStore } from "../store/useAuthStore";
+import { useUserStore } from "../store/useUserStore";
 
 const SendMessageInput = () => {
   const { selectedUser, sendMessage } = useChatStore();
-  const { socket } = useAuthStore();
+  const { socket, authUser } = useAuthStore();
+  const {
+    subscribeToBlockingOrUnblockingEvent,
+    unsubscribeFromBlockingOrUnblockingEvent,
+  } = useUserStore();
   const [text, setText] = useState("");
   const [image, setImage] = useState(null);
   const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
@@ -28,9 +33,11 @@ const SendMessageInput = () => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
+    subscribeToBlockingOrUnblockingEvent();
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      unsubscribeFromBlockingOrUnblockingEvent();
     };
   }, []);
 
@@ -40,6 +47,7 @@ const SendMessageInput = () => {
   }, [selectedUser]);
 
   const handleMessageTyping = (e) => {
+    if (selectedUser.blockedUsers.includes(authUser._id)) return;
     setText(e.target.value);
     socket.emit("typing", selectedUser._id);
     if (timeout) {
@@ -52,6 +60,8 @@ const SendMessageInput = () => {
 
   const handleSendMessage = (e) => {
     e.preventDefault();
+    if (selectedUser.blockedUsers.includes(authUser._id)) return;
+    console.log("Blocked users", selectedUser.blockedUsers);
     if (!text.trim() && !image) {
       setText("");
       setImage(null);
@@ -68,6 +78,7 @@ const SendMessageInput = () => {
 
   const handleToggleEmojiPicker = (e) => {
     e.preventDefault();
+    if (selectedUser.blockedUsers.includes(authUser._id)) return;
     setEmojiPickerOpen(!emojiPickerOpen);
   };
 
@@ -76,12 +87,14 @@ const SendMessageInput = () => {
   };
 
   const handleImageUpload = () => {
+    if (selectedUser.blockedUsers.includes(authUser._id)) return;
     if (imageUploadInputBoxRef) {
       imageUploadInputBoxRef.current.click();
     }
   };
 
   const loadImage = (e) => {
+    if (selectedUser.blockedUsers.includes(authUser._id)) return;
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);

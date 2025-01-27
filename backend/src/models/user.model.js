@@ -32,6 +32,15 @@ const userSchema = new mongoose.Schema(
       required: false,
       default: "I am ...",
     },
+    blockedUsers: {
+      type: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+      ],
+      default: [],
+    },
   },
   { timestamps: true }
 );
