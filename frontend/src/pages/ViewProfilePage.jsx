@@ -8,11 +8,7 @@ import { useUserStore } from "../store/useUserStore";
 const ViewProfilePage = () => {
   const navigate = useNavigate();
   const { selectedUser } = useChatStore();
-  const {
-    authUser,
-
-    checkAuth,
-  } = useAuthStore();
+  const { authUser, checkAuth } = useAuthStore();
 
   const { isBlockingOrUnblockingUser, blockOrUnblockUser } = useUserStore();
 
@@ -25,7 +21,7 @@ const ViewProfilePage = () => {
   };
 
   const handleBlockUser = () => {
-    const block = !authUser.blockedUsers.includes(selectedUser._id);
+    const block = !authUser.blockedUsers?.includes(selectedUser._id);
     blockOrUnblockUser(block);
   };
 
@@ -93,7 +89,7 @@ const ViewProfilePage = () => {
                   <Loader className="size-6 animate-spin pointer-events-none" />
                 ) : (
                   <p>
-                    {authUser.blockedUsers.includes(selectedUser._id)
+                    {authUser.blockedUsers?.includes(selectedUser._id)
                       ? "Unblock"
                       : "Block"}
                   </p>
