@@ -11,6 +11,7 @@ export const useUserStore = create((set, get) => ({
     try {
       set({ isBlockingOrUnblockingUser: true });
       const { selectedUser } = useChatStore.getState();
+      if (!selectedUser) return;
       const res = await axiosInstance.put(
         `/users/block-or-unblock/${selectedUser._id}`,
         { block }
@@ -25,6 +26,7 @@ export const useUserStore = create((set, get) => ({
 
   subscribeToBlockingOrUnblockingEvent: () => {
     const { socket } = useAuthStore.getState();
+    if (!socket) return;
     socket.on("block-or-unblock", (user) => {
       useChatStore.setState({ selectedUser: user });
     });

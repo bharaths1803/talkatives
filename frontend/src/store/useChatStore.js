@@ -99,6 +99,7 @@ export const useChatStore = create((set, get) => ({
   subscribeToTypingEvents: () => {
     const { selectedUser } = get();
     const { socket } = useAuthStore.getState();
+    if (!socket) return;
     socket.on("typing", (userId) => {
       if (userId === selectedUser._id) {
         get().setIsTyping(true);
