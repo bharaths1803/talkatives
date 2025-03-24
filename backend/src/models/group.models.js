@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const groupSchema = new mongoose.Schema({
   groupname: {
-    type: string,
+    type: String,
     required: true,
   },
   profilePicUrl: {

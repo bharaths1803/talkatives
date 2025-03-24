@@ -8,6 +8,7 @@ import { connectDB } from "./lib/db.js";
 import authRoutes from "./routes/auth.route.js";
 import userRoutes from "./routes/user.route.js";
 import messageRoutes from "./routes/message.route.js";
+import groupRoutes from "./routes/group.route.js";
 import { app, server } from "./lib/socket.js";
 
 dotenv.config();
@@ -36,6 +37,7 @@ app.use(
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/message", messageRoutes);
+app.use("/api/group", groupRoutes);
 
 //process.env.NODE_ENV !== "development"
 if (process.env.NODE_ENV !== "development") {

@@ -21,9 +21,7 @@ export const createGroup = async (req, res) => {
       },
       {
         $push: {
-          groups: {
-            groupId,
-          },
+          groups: groupId,
         },
       }
     );
