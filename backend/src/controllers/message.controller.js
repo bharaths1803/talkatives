@@ -1,5 +1,6 @@
 import cloudinary from "../lib/cloudinary.js";
 import { getUserSocketId, io } from "../lib/socket.js";
+import Group from "../models/group.models.js";
 import Message from "../models/message.model.js";
 
 export const getMessages = async (req, res) => {
@@ -36,10 +37,16 @@ export const sendMessage = async (req, res) => {
       imageUrl,
     });
     await message.save();
-    const receiverSocketId = getUserSocketId(receiverId);
-    if (receiverSocketId) {
-      io.to(receiverSocketId).emit("newMessage", message);
+    const group = await Group.findById(receiverId);
+    if (group) {
+      io.to(receiverId).emit("newMessage", message);
+    } else {
+      const receiverSocketId = getUserSocketId(receiverId);
+      if (receiverSocketId) {
+        io.to(receiverSocketId).emit("newMessage", message);
+      }
     }
+
     res.status(200).json({ message });
   } catch (error) {
     console.log(`Error in send messages controller`);

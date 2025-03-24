@@ -1,6 +1,7 @@
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
+import User from "../models/user.model";
 
 const app = express();
 const server = http.createServer(app);
@@ -17,9 +18,14 @@ export function getUserSocketId(userId) {
   return userSocketMap[userId];
 }
 
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
   const { userId } = socket.handshake.query;
   if (userId) userSocketMap[userId] = socket.id;
+
+  const userGroups = await User.findById(userId).groups;
+  userGroups.forEach((groupId) => {
+    groupId.toString().join(socket);
+  });
 
   socket.on("disconnect", () => {
     delete userSocketMap[userId];

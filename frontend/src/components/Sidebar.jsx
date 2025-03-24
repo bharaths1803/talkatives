@@ -76,7 +76,9 @@ const Sidebar = () => {
                     />
                   </div>
                 ) : (
-                  <CircleUserRound className="size-12 pl-2" />
+                  <div className="size-12 pl-2">
+                    <CircleUserRound className="size-full" />
+                  </div>
                 )}
                 <p className="text-black">{user.username}</p>
               </button>

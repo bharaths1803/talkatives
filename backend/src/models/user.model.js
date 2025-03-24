@@ -41,6 +41,15 @@ const userSchema = new mongoose.Schema(
       ],
       default: [],
     },
+    groups: {
+      type: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "GRoup",
+        },
+      ],
+      default: [],
+    },
   },
   { timestamps: true }
 );
