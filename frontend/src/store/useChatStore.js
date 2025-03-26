@@ -10,6 +10,11 @@ export const useChatStore = create((set, get) => ({
   messages: [],
   isMessagesLoading: false,
   isTyping: false,
+  isCreatingGroup: false,
+  selectedType: "users",
+  isGroupsLoading: false,
+  groups: [],
+  selectedGroup: null,
 
   getUsers: async () => {
     try {
@@ -117,5 +122,39 @@ export const useChatStore = create((set, get) => ({
     if (!socket) return;
     socket.off("typing");
     socket.off("stop-typing");
+  },
+
+  createGroup: async (groupData) => {
+    try {
+      set({ isCreatingGroup: true });
+      await axiosInstance.post(`/group/create`, groupData);
+      toast.success("Group created Successfully");
+      const { getGroups } = get();
+      getGroups();
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+      set({ isCreatingGroup: false });
+    }
+  },
+
+  setSelectedType: (selectedType) => {
+    set({ selectedType });
+  },
+
+  getGroups: async () => {
+    try {
+      set({ isGroupsLoading: true });
+      const res = await axiosInstance.get("/group/groups");
+      set({ groups: res.data });
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+      set({ isGroupsLoading: false });
+    }
+  },
+
+  setSelectedGroup: (selectedGroup) => {
+    set({ selectedGroup });
   },
 }));
