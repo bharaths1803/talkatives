@@ -40,6 +40,15 @@ const groupSchema = new mongoose.Schema({
     ],
     default: [],
   },
+  messages: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Message",
+      },
+    ],
+    default: [],
+  },
 });
 
 const Group = mongoose.model("Group", groupSchema);

@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import NoChatSelected from "../skeletons/NoChatSelected";
 import { useChatStore } from "../store/useChatStore";
@@ -7,15 +6,25 @@ import ChatHeader from "./ChatHeader";
 import SendMessageInput from "./SendMessageInput";
 
 const ChatContainer = () => {
-  const { selectedUser, subscribeToMessages, unsubscribeFromMessages } =
-    useChatStore();
+  const {
+    selectedUser,
+    subscribeToMessages,
+    unsubscribeFromMessages,
+    selectedGroup,
+  } = useChatStore();
 
   useEffect(() => {
     subscribeToMessages();
     return () => unsubscribeFromMessages();
-  }, [subscribeToMessages, unsubscribeFromMessages, selectedUser]);
+  }, [
+    subscribeToMessages,
+    unsubscribeFromMessages,
+    selectedUser,
+    selectedGroup,
+  ]);
 
-  if (!selectedUser) {
+  if (!selectedUser && !selectedGroup) {
+    console.log("In Chat container section");
     return <NoChatSelected />;
   }
   return (

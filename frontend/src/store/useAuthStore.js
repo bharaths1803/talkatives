@@ -13,6 +13,7 @@ export const useAuthStore = create((set, get) => ({
   isLoggingin: false,
   isLoggingout: false,
   socket: null,
+  onlineUsers: [],
 
   checkAuth: async () => {
     try {
@@ -81,6 +82,9 @@ export const useAuthStore = create((set, get) => ({
       });
       socket.connect();
       set({ socket });
+      socket.on("onlineusers", (onlineUsers) => {
+        set({ onlineUsers });
+      });
     } catch (error) {
       console.log(`Error connecting to socket ${error}`);
     }

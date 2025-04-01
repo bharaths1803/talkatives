@@ -8,6 +8,7 @@ export const getUsers = async (req, res) => {
     const users = await User.find({
       _id: { $ne: loggedinUserId },
     }).select("-password");
+    console.log(users);
     res.status(201).json({ users });
   } catch (error) {
     console.log(`Error in get users controller ${error}`);

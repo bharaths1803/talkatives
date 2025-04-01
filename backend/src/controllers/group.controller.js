@@ -1,6 +1,8 @@
 import User from "../models/user.model.js";
 import cloudinary from "../lib/cloudinary.js";
 import Group from "../models/group.models.js";
+import Message from "../models/message.model.js";
+import { io } from "../lib/socket.js";
 
 export const createGroup = async (req, res) => {
   try {
@@ -147,5 +149,65 @@ export const removeMember = async (req, res) => {
   } catch (error) {
     console.log("Error in remove member controlller", error);
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getMessages = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const messages = await Message.find({
+      groupId,
+    });
+    res.status(201).json({ messages });
+  } catch (error) {
+    console.log(`Error in get messages controller`);
+    res.status(500).json({ message: `Internal server error` });
+  }
+};
+
+export const sendGroupMessage = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const { text, image } = req.body;
+    let imageUrl;
+    if (image) {
+      const result = await cloudinary.uploader.upload(image);
+      imageUrl = result.secure_url;
+    }
+    const senderId = req.user._id;
+    const message = await Message.create({
+      senderId,
+      groupId,
+      text,
+      imageUrl,
+    });
+    await message.save();
+    io.to(groupId).emit("newMessage", message);
+    res.status(200).json({ message });
+  } catch (error) {
+    console.log(`Error in send messages controller`);
+    res.status(500).json({ message: `Internal server error` });
+  }
+};
+
+export const updateGroupDescription = async (req, res) => {
+  try {
+    const { description } = req.body;
+    const { groupId } = req.params;
+    const loggedinUserId = req.user._id;
+    const group = await Group.findById(groupId);
+    if (!group.admins.includes(loggedinUserId)) {
+      console.log(group.admins);
+      console.log(loggedinUserId);
+      return res.status(401).json({
+        message: "You can not perform this action",
+      });
+    }
+    group.description = description;
+    await group.save();
+    res.status(201).json({ group });
+  } catch (error) {
+    console.log(`Error in update group description controller ${error}`);
+    res.status(500).json({ message: `Internal server error` });
   }
 };

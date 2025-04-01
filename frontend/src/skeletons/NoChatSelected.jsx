@@ -11,7 +11,7 @@ const NoChatSelected = () => {
           Welcome back to Talkatives!!!
         </h1>
         <h2 className="text-black/80 font-medium">
-          Select your buddy and start your conversation today...
+          Select your buddy or group and start your conversation today...
         </h2>
       </div>
     </div>

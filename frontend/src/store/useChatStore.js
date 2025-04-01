@@ -15,6 +15,24 @@ export const useChatStore = create((set, get) => ({
   isGroupsLoading: false,
   groups: [],
   selectedGroup: null,
+  isUpdatingGroupDescription: false,
+
+  updateGroupDescription: async (description) => {
+    try {
+      const { selectedGroup } = get();
+      set({ isUpdatingGroupDescription: true });
+      const res = await axiosInstance.put(
+        `/group/update-group-description/${selectedGroup._id}`,
+        { description }
+      );
+      const { setSelectedGroup } = get();
+      setSelectedGroup(res.data.group);
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+      set({ isUpdatingGroupDescription: false });
+    }
+  },
 
   getUsers: async () => {
     try {
@@ -48,7 +66,6 @@ export const useChatStore = create((set, get) => ({
         `/message/send/${selectedUser._id}`,
         messageData
       );
-
       set({ messages: [...messages, res.data.message] });
     } catch (error) {
       toast.error(error.response.data.message);
@@ -60,8 +77,12 @@ export const useChatStore = create((set, get) => ({
   getMessages: async () => {
     try {
       set({ isMessagesLoading: true });
-      const { selectedUser } = get();
-      const res = await axiosInstance.get(`/message/${selectedUser._id}`);
+      const { selectedUser, selectedType, selectedGroup } = get();
+      const res = await axiosInstance.get(
+        `/message/${
+          selectedType === "users" ? selectedUser._id : selectedGroup._id
+        }`
+      );
       set({ messages: res.data.messages });
     } catch (error) {
       toast.error(error.response.data.message);

@@ -5,12 +5,13 @@ import Message from "../models/message.model.js";
 
 export const getMessages = async (req, res) => {
   try {
-    const { toChatUserId } = req.params;
+    const { toChatId } = req.params;
     const currentUserId = req.user._id;
     const messages = await Message.find({
       $or: [
-        { senderId: currentUserId, receiverId: toChatUserId },
-        { senderId: toChatUserId, receiverId: currentUserId },
+        { senderId: currentUserId, receiverId: toChatId },
+        { senderId: toChatId, receiverId: toChatId },
+        { groupId: toChatId },
       ],
     });
     res.status(201).json({ messages });
@@ -37,14 +38,10 @@ export const sendMessage = async (req, res) => {
       imageUrl,
     });
     await message.save();
-    const group = await Group.findById(receiverId);
-    if (group) {
-      io.to(receiverId).emit("newMessage", message);
-    } else {
-      const receiverSocketId = getUserSocketId(receiverId);
-      if (receiverSocketId) {
-        io.to(receiverSocketId).emit("newMessage", message);
-      }
+
+    const receiverSocketId = getUserSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", message);
     }
 
     res.status(200).json({ message });

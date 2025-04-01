@@ -25,7 +25,6 @@ const Sidebar = () => {
   useEffect(() => {
     getUsers();
     getGroups();
-    console.log(groups);
   }, [getUsers, getGroups]);
 
   const handleSearchUsers = (e) => {
@@ -33,6 +32,7 @@ const Sidebar = () => {
   };
 
   const handleSelectUser = (user) => {
+    if (user === selectedGroup) return;
     setSelectedUser(user);
     getMessages();
   };
@@ -44,6 +44,8 @@ const Sidebar = () => {
   };
 
   const handleSelectType = (selectedType) => {
+    setSelectedGroup(null);
+    setSelectedUser(null);
     setSelectedType(selectedType);
   };
 

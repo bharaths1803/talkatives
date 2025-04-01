@@ -13,6 +13,7 @@ const ChatContent = () => {
     isTyping,
     subscribeToTypingEvents,
     unsubscribeFromTypingEvents,
+    selectedType,
   } = useChatStore();
   const lastMessageRef = useRef();
 
@@ -131,9 +132,9 @@ const ChatContent = () => {
           </div>
         </div>
       )}
-      {!isMessagesLoading && messages.length == 0 && (
-        <StartConvesrationWithNewFriend />
-      )}
+      {selectedType === "users" &&
+        !isMessagesLoading &&
+        messages.length == 0 && <StartConvesrationWithNewFriend />}
     </div>
   );
 };
