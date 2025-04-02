@@ -7,7 +7,7 @@ import {
   makeAdmin,
   removeMember,
   updateGroupDescription,
-  updateProfile,
+  updatePhoto,
 } from "../controllers/group.controller.js";
 
 const router = express.Router();
@@ -19,6 +19,7 @@ router.put(
   protectRoute,
   updateGroupDescription
 );
+router.put("/update-group-photo/:groupId", protectRoute, updatePhoto);
 router.put("/add-members", protectRoute, addMembers);
 router.put("/make-admin", protectRoute, makeAdmin);
 router.delete("/remove-member", protectRoute, removeMember);

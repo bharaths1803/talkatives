@@ -9,6 +9,7 @@ const EditGroupDescriptionDialog = ({ open, onClose }) => {
 
   const handleUpdateGroupDescription = () => {
     updateGroupDescription(description);
+    onClose();
   };
 
   return (

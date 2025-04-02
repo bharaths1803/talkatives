@@ -16,6 +16,8 @@ export const useChatStore = create((set, get) => ({
   groups: [],
   selectedGroup: null,
   isUpdatingGroupDescription: false,
+  isUpdatingGroupPhoto: false,
+  isAddingMembers: false,
 
   updateGroupDescription: async (description) => {
     try {
@@ -27,10 +29,29 @@ export const useChatStore = create((set, get) => ({
       );
       const { setSelectedGroup } = get();
       setSelectedGroup(res.data.group);
+      toast.success("Group description updated successfully!");
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
       set({ isUpdatingGroupDescription: false });
+    }
+  },
+
+  updateGroupPhoto: async (profilePic) => {
+    try {
+      const { selectedGroup } = get();
+      set({ isUpdatingGroupPhoto: true });
+      const res = await axiosInstance.put(
+        `/group/update-group-photo/${selectedGroup._id}`,
+        { profilePic }
+      );
+      const { setSelectedGroup } = get();
+      setSelectedGroup(res.data.group);
+      toast.success("Group photo updated successfully!");
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+      set({ isUpdatingGroupPhoto: false });
     }
   },
 

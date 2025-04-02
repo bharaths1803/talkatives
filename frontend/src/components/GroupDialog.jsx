@@ -1,15 +1,21 @@
-import { X } from "lucide-react";
-import { useRef, useState } from "react";
+import { CircleUserRound, Loader, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
 import EditGroupDescriptionDialog from "./EditGroupDescriptionDialog";
+import ViewMembersDialog from "./ViewMembersDialog";
+import AddMembersDialog from "./AddMembersDialog";
 
 const GroupDialog = ({ open, onClose }) => {
   const [profilePic, setProfilePic] = useState(null);
   const [editDescriptionDialogOpen, setEditDescriptionDialogOpen] =
     useState(false);
 
+  const [viewMembersDialogOpen, setViewMembersDialogOpen] = useState(false);
+  const [addMembersDialogOpen, setAddMembersDialogOpen] = useState(false);
+
   const imageUploadInputBoxRef = useRef(null);
-  const { selectedGroup } = useChatStore();
+  const { selectedGroup, updateGroupPhoto, isUpdatingGroupPhoto } =
+    useChatStore();
 
   const handleImageUpload = () => {
     if (imageUploadInputBoxRef) {
@@ -40,6 +46,33 @@ const GroupDialog = ({ open, onClose }) => {
     setEditDescriptionDialogOpen(false);
   };
 
+  function formatDateToMonthYear(dateString) {
+    if (!dateString) return "Jan 2025";
+    const date = new Date(dateString);
+    const options = { month: "short", year: "numeric" };
+    return date.toLocaleDateString("en-US", options);
+  }
+
+  const handleOpenViewMembersDialog = () => {
+    setViewMembersDialogOpen(true);
+  };
+
+  const handleCloseViewMembersDialog = () => {
+    setViewMembersDialogOpen(false);
+  };
+
+  const handleOpenAddMembersDialog = () => {
+    setAddMembersDialogOpen(true);
+  };
+
+  const handleCloseAddMembersDialog = () => {
+    setAddMembersDialogOpen(false);
+  };
+
+  const handleUpdatePhoto = () => {
+    updateGroupPhoto(profilePic);
+  };
+
   return (
     <>
       {open && (
@@ -47,6 +80,14 @@ const GroupDialog = ({ open, onClose }) => {
           <EditGroupDescriptionDialog
             open={editDescriptionDialogOpen}
             onClose={handleCloseEditDescriptionDialog}
+          />
+          <ViewMembersDialog
+            open={viewMembersDialogOpen}
+            onClose={handleCloseViewMembersDialog}
+          />
+          <AddMembersDialog
+            open={addMembersDialogOpen}
+            onClose={handleCloseAddMembersDialog}
           />
           <div className="fixed top-0 left-0 w-screen h-screen opacity-50 backdrop-blur-sm z-20" />
           <div className="fixed top-0 left-0 w-screen h-screen flex flex-col py-20 items-center space-y-4 z-30">
@@ -59,9 +100,9 @@ const GroupDialog = ({ open, onClose }) => {
                   <X className="size-6" />
                 </button>
               </div>
-              <div className="w-full flex justify-center">
+              <div className="w-full flex justify-center items-center gap-2">
                 <button
-                  className="rounded-full size-20"
+                  className="rounded-full size-20 hover:opacity-50"
                   onClick={handleImageUpload}
                 >
                   <img
@@ -78,6 +119,16 @@ const GroupDialog = ({ open, onClose }) => {
                     onChange={loadImage}
                   />
                 </button>
+                <button
+                  className="text-sm bg-btn-primary h-12 px-2 rounded-lg text-white hover:opacity-80 active:opacity-60 flex justify-center items-center"
+                  onClick={handleUpdatePhoto}
+                >
+                  {isUpdatingGroupPhoto ? (
+                    <Loader className="size-5 animate-spin" />
+                  ) : (
+                    "Update Photo"
+                  )}
+                </button>
               </div>
               <h2 className="w-full text-center text-2xl">
                 {selectedGroup.groupname}
@@ -86,13 +137,65 @@ const GroupDialog = ({ open, onClose }) => {
                 Group {selectedGroup.members.length} members
               </h3>
               <button
-                className="mt-2 flex bg-royal-purple rounded-lg h-10 pl-3 py-2 mx-2 w-[95%]"
+                className="mt-2 flex bg-royal-purple rounded-lg pl-3 py-2 mx-2 w-[95%]"
                 onClick={handleOpenEditDescriptionDialog}
               >
                 <span className="">
                   {selectedGroup.description || "Edit group description"}
                 </span>
               </button>
+              <h3 className="text-center">
+                Created by {selectedGroup.createdBy.username},{" "}
+                {formatDateToMonthYear(
+                  selectedGroup.createdAt || selectedGroup.updatedAt
+                )}
+              </h3>
+              <div className="w-full flex justify-between items-center px-3">
+                <button
+                  className="text-sm bg-btn-primary text-white rounded-full px-3 py-2 hover:opacity-80 active:opacity-60 flex justify-center items-center"
+                  onClick={handleOpenAddMembersDialog}
+                >
+                  Add Members
+                </button>
+                <button
+                  className="text-sm bg-btn-primary text-white rounded-full px-3 py-2 hover:opacity-80 active:opacity-60 flex justify-center items-center mx-2"
+                  onClick={handleOpenViewMembersDialog}
+                >
+                  View Members
+                </button>
+              </div>
+
+              {/* <div className="overflow-y-auto scrollbar-none space-y-2 mt-2 mr-2 h-[80%]">
+                {selectedGroup.members &&
+                  selectedGroup.members.length > 0 &&
+                  selectedGroup.members.map((user) => (
+                    <button
+                      key={user._id}
+                      className={`w-full flex items-center h-14 pl-0 py-6 text-black/50 hover:bg-royal-purple mx-2 active:bg-blue-400 space-x-3`}
+                    >
+                      {user.profilePicUrl ? (
+                        <div className="size-10 ml-2">
+                          <img
+                            src={user.profilePicUrl}
+                            alt="User profile pic"
+                            className="size-full rounded-full"
+                          />
+                        </div>
+                      ) : (
+                        <div className="size-12 pl-2">
+                          <CircleUserRound className="size-full" />
+                        </div>
+                      )}
+                      <p className="text-black">{user.username}</p>
+                    </button>
+                  ))}
+              </div> */}
+              <div className="w-full flex justify-center items-center">
+                <button className="text-sm bg-red-700 text-white rounded-full px-3 py-2 hover:opacity-80 active:opacity-60 flex justify-center items-center">
+                  Exit Group
+                </button>
+              </div>
+
               {/* <div className="w-full h-[70%] overflow-y-auto scrollbar-none space-y-2 mt-2">
                 {!isUsersLoading &&
                   users.length > 0 &&

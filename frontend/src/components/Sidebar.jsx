@@ -40,6 +40,7 @@ const Sidebar = () => {
   const handleSelectGroup = (group) => {
     if (group === selectedGroup) return;
     setSelectedGroup(group);
+    console.log("Seleceted group", selectedGroup);
     getMessages();
   };
 

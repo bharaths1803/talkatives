@@ -12,10 +12,11 @@ export const createGroup = async (req, res) => {
     const group = await Group.create({
       members,
       groupname,
+      createdBy: loggedInUserId,
     });
-
     group.admins.push(loggedInUserId);
     await group.save();
+    group.populate("createdBy");
     const groupId = group._id;
     await User.updateMany(
       {
@@ -42,10 +43,16 @@ export const getGroups = async (req, res) => {
     const user = await User.findById(loggedInUserId)
       .populate({
         path: "groups",
-        populate: {
-          path: "members",
-          select: "-password",
-        },
+        populate: [
+          {
+            path: "members",
+            select: "-password",
+          },
+          {
+            path: "createdBy",
+            select: "-password",
+          },
+        ],
       })
       .lean();
     const groups = user.groups;
@@ -53,32 +60,6 @@ export const getGroups = async (req, res) => {
   } catch (error) {
     console.log("Error in get groups controlller", error);
     res.status(500).json({ message: "Internal server error" });
-  }
-};
-
-export const updateProfile = async (req, res) => {
-  try {
-    const { profilePic, description } = req.body;
-    const { groupId } = req.params;
-    const loggedinUserId = req.user._id;
-    const group = await Group.findById(groupId);
-    if (!group.admins.includes(loggedinUserId)) {
-      return res.status(401).json({
-        message: "You can not perform this action",
-      });
-    }
-    let profilePicUrl;
-    if (profilePic) {
-      const result = await cloudinary.uploader.upload(profilePic);
-      profilePicUrl = result.secure_url;
-    }
-    if (profilePicUrl) group.profilePicUrl = profilePicUrl;
-    if (description) group.description = description;
-    await group.save();
-    res.status(201).json({ group });
-  } catch (error) {
-    console.log(`Error in update profile controller ${error}`);
-    res.status(500).json({ message: `Internal server error` });
   }
 };
 
@@ -208,6 +189,28 @@ export const updateGroupDescription = async (req, res) => {
     res.status(201).json({ group });
   } catch (error) {
     console.log(`Error in update group description controller ${error}`);
+    res.status(500).json({ message: `Internal server error` });
+  }
+};
+
+export const updatePhoto = async (req, res) => {
+  try {
+    const { profilePic } = req.body;
+    const { groupId } = req.params;
+    const loggedinUserId = req.user._id;
+    const group = await Group.findById(groupId);
+    if (!group.admins.includes(loggedinUserId)) {
+      return res.status(401).json({
+        message: "You can not perform this action",
+      });
+    }
+    const result = await cloudinary.uploader.upload(profilePic);
+    const profilePicUrl = result.secure_url;
+    group.profilePicUrl = profilePicUrl;
+    await group.save();
+    res.status(201).json({ group });
+  } catch (error) {
+    console.log(`Error in update profile controller ${error}`);
     res.status(500).json({ message: `Internal server error` });
   }
 };
