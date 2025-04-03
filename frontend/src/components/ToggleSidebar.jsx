@@ -30,10 +30,12 @@ const ToggleSidebar = () => {
 
   return (
     <>
-      <CreateGroupDialog
-        open={createGroupDialogOpen}
-        onClose={handleCloseCreateGroupDialog}
-      />
+      {createGroupDialogOpen && (
+        <CreateGroupDialog
+          open={createGroupDialogOpen}
+          onClose={handleCloseCreateGroupDialog}
+        />
+      )}
       <div
         className={`h-full ${
           toggleOpen ? "w-24" : "w-12"

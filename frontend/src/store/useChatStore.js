@@ -18,6 +18,7 @@ export const useChatStore = create((set, get) => ({
   isUpdatingGroupDescription: false,
   isUpdatingGroupPhoto: false,
   isAddingMembers: false,
+  isExitingGroup: false,
 
   updateGroupDescription: async (description) => {
     try {
@@ -198,5 +199,52 @@ export const useChatStore = create((set, get) => ({
 
   setSelectedGroup: (selectedGroup) => {
     set({ selectedGroup });
+  },
+
+  addMembers: async (members) => {
+    try {
+      set({ isAddingMembers: true });
+      const { selectedGroup } = get();
+      await axiosInstance.put(`/group/add-members/${selectedGroup._id}`, {
+        members,
+      });
+      const { getGroupById, getGroups } = get();
+      getGroupById();
+      getGroups();
+      toast.success("Members added successfully!");
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+      set({ isAddingMembers: false });
+    }
+  },
+
+  getGroupById: async () => {
+    try {
+      const { selectedGroup, setSelectedGroup } = get();
+      const res = await axiosInstance.get(
+        `/group/get-group-by-id/${selectedGroup._id}`
+      );
+      setSelectedGroup(res.data);
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+    }
+  },
+
+  exitGroup: async () => {
+    try {
+      set({ isExitingGroup: true });
+      const { selectedGroup } = get();
+      await axiosInstance.delete(`/group/exit-group/${selectedGroup._id}`);
+      const { getGroups, setSelectedGroup } = get();
+      setSelectedGroup(null);
+      getGroups();
+      toast.success("Exited group successfully!");
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+      set({ isExitingGroup: false });
+    }
   },
 }));

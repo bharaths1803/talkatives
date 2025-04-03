@@ -20,12 +20,13 @@ const Sidebar = () => {
     isGroupsLoading,
     setSelectedGroup,
     selectedGroup,
+    addMembers,
   } = useChatStore();
 
   useEffect(() => {
     getUsers();
     getGroups();
-  }, [getUsers, getGroups]);
+  }, [getUsers, getGroups, addMembers]);
 
   const handleSearchUsers = (e) => {
     getSearchedUsers(e.target.value);
