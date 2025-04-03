@@ -24,13 +24,12 @@ const ChatContainer = () => {
   ]);
 
   if (!selectedUser && !selectedGroup) {
-    console.log("In Chat container section");
     return <NoChatSelected />;
   }
   return (
     <div
       className={`h-screen flex flex-col ${
-        selectedUser ? "w-full" : "w-0"
+        selectedUser || selectedGroup ? "w-full" : "w-0"
       } md:w-full transition-all`}
     >
       <ChatHeader />

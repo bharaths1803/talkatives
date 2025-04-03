@@ -5,7 +5,10 @@ import {
   createGroup,
   exitGroup,
   getGroupById,
+  getGroupMessages,
   getGroups,
+  getSearchedGroups,
+  sendGroupMessage,
   updateGroupDescription,
   updatePhoto,
 } from "../controllers/group.controller.js";
@@ -23,5 +26,8 @@ router.put("/update-group-photo/:groupId", protectRoute, updatePhoto);
 router.put("/add-members/:groupId", protectRoute, addMembers);
 router.get("/get-group-by-id/:groupId", protectRoute, getGroupById);
 router.delete("/exit-group/:groupId", protectRoute, exitGroup);
+router.get("/bulk", protectRoute, getSearchedGroups);
+router.post("/send/:groupId", protectRoute, sendGroupMessage);
+router.get("/send/:groupId", protectRoute, getGroupMessages);
 
 export default router;

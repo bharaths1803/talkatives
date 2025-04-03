@@ -24,8 +24,10 @@ const ChatContent = () => {
   }, [messages]);
 
   useEffect(() => {
-    subscribeToTypingEvents();
-    return () => unsubscribeFromTypingEvents();
+    if (selectedType === "users") {
+      subscribeToTypingEvents();
+      return () => unsubscribeFromTypingEvents();
+    }
   }, []);
 
   return (
@@ -34,19 +36,36 @@ const ChatContent = () => {
       {!isMessagesLoading &&
         messages.length > 0 &&
         messages.map((message, idx) => {
+          const isGroupMessage = selectedType === "groups";
           const prevIdx = idx - 1;
-          const prevMessageSenderId =
-            idx != 0 ? messages[prevIdx].senderId : "";
-          const isSenderMessage = authUser._id === message.senderId;
-          const isStartingMessageOfNewContiguousSequence =
-            idx == 0 || prevMessageSenderId !== message.senderId;
+          let prevMessageSenderId,
+            isSenderMessage,
+            isStartingMessageOfNewContiguousSequence;
+          if (!isGroupMessage) {
+            prevMessageSenderId = idx != 0 ? messages[prevIdx].senderId : "";
+            isSenderMessage = authUser._id === message.senderId;
+            isStartingMessageOfNewContiguousSequence =
+              idx == 0 || prevMessageSenderId !== message.senderId;
+          } else {
+            prevMessageSenderId =
+              idx != 0 ? messages[prevIdx].senderId._id : "";
+            isSenderMessage = authUser._id === message.senderId._id;
+            isStartingMessageOfNewContiguousSequence =
+              idx == 0 || prevMessageSenderId !== message.senderId._id;
+          }
           return (
             <div
               key={message._id}
               className={`w-full flex ${
                 isSenderMessage ? "justify-end" : "justify-start "
               } ${
-                prevMessageSenderId === message.senderId
+                isGroupMessage
+                  ? prevMessageSenderId === message.senderId._id
+                    ? isSenderMessage
+                      ? "pr-11"
+                      : "pl-11"
+                    : ""
+                  : prevMessageSenderId === message.senderId
                   ? isSenderMessage
                     ? "pr-11"
                     : "pl-11"
@@ -80,19 +99,37 @@ const ChatContent = () => {
                       <p className="max-w-fit break-all"> {message.text}</p>
                     </div>
                   </div>
-                  {isStartingMessageOfNewContiguousSequence && (
-                    <div className="size-7">
-                      <CircleUser className="object-cover" />
-                    </div>
-                  )}
+                  {!isGroupMessage &&
+                    isStartingMessageOfNewContiguousSequence && (
+                      <div className="size-7">
+                        <CircleUser className="object-cover" />
+                      </div>
+                    )}
+                  {isGroupMessage &&
+                    isStartingMessageOfNewContiguousSequence && (
+                      <img
+                        src={message.senderId.profilePicUrl || "user.png"}
+                        alt="User icon image"
+                        className="size-7 rounded-full"
+                      />
+                    )}
                 </>
               ) : (
                 <>
-                  {isStartingMessageOfNewContiguousSequence && (
-                    <div className="size-7">
-                      <CircleUser className="object-cover" />
-                    </div>
-                  )}
+                  {!isGroupMessage &&
+                    isStartingMessageOfNewContiguousSequence && (
+                      <div className="size-7">
+                        <CircleUser className="object-cover" />
+                      </div>
+                    )}
+                  {isGroupMessage &&
+                    isStartingMessageOfNewContiguousSequence && (
+                      <img
+                        src={message.senderId.profilePicUrl || "user.png"}
+                        alt="User icon image"
+                        className="size-7 rounded-full"
+                      />
+                    )}
                   <div
                     className={`${
                       message.imageUrl && !message.text
@@ -113,7 +150,12 @@ const ChatContent = () => {
                         />
                       </div>
                     )}
-                    <div>
+                    <div className="space-y-2">
+                      {isGroupMessage && (
+                        <p className="max-w-fit break-all font-semibold">
+                          {message.senderId.username}
+                        </p>
+                      )}
                       <p className="max-w-fit break-all"> {message.text}</p>
                     </div>
                   </div>

@@ -24,10 +24,12 @@ io.on("connection", async (socket) => {
     userSocketMap[userId] = socket.id;
     io.emit("onlineusers", Object.keys(userSocketMap));
   }
-  const groups = await User.findById(userId).groups;
+  const user = await User.findById(userId);
+  const groups = user.groups;
   if (groups) {
     groups.forEach((group) => {
-      socket.join(group);
+      console.log("Here for", user.username, group);
+      socket.join(group.toString());
     });
   }
   socket.on("disconnect", () => {

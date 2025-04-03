@@ -21,6 +21,8 @@ const Sidebar = () => {
     setSelectedGroup,
     selectedGroup,
     addMembers,
+    getSearchedGroups,
+    getGroupMessages,
   } = useChatStore();
 
   useEffect(() => {
@@ -28,8 +30,9 @@ const Sidebar = () => {
     getGroups();
   }, [getUsers, getGroups, addMembers]);
 
-  const handleSearchUsers = (e) => {
-    getSearchedUsers(e.target.value);
+  const handleSearch = (e) => {
+    if (selectedType === "users") getSearchedUsers(e.target.value);
+    else getSearchedGroups(e.target.value);
   };
 
   const handleSelectUser = (user) => {
@@ -41,8 +44,7 @@ const Sidebar = () => {
   const handleSelectGroup = (group) => {
     if (group === selectedGroup) return;
     setSelectedGroup(group);
-    console.log("Seleceted group", selectedGroup);
-    getMessages();
+    getGroupMessages();
   };
 
   const handleSelectType = (selectedType) => {
@@ -54,7 +56,7 @@ const Sidebar = () => {
   return (
     <div
       className={`h-full ${
-        !selectedUser ? "w-full" : "w-0"
+        !selectedUser && !selectedGroup ? "w-full" : "w-0"
       } md:w-80 bg-soft-purple flex flex-col transition-all`}
     >
       <div className="py-4 px-0 flex-1 overflow-y-auto scrollbar-none">
@@ -86,7 +88,7 @@ const Sidebar = () => {
             type="text"
             className="w-full bg-transparent border-none focus:outline-none pl-2 placeholder:text-black"
             placeholder="Search"
-            onChange={handleSearchUsers}
+            onChange={handleSearch}
           />
           <div className="flex justify-center items-center">
             <Search className="size-5" />

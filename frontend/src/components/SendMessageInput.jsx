@@ -7,7 +7,13 @@ import { useAuthStore } from "../store/useAuthStore";
 import { useUserStore } from "../store/useUserStore";
 
 const SendMessageInput = () => {
-  const { selectedUser, sendMessage } = useChatStore();
+  const {
+    selectedUser,
+    sendMessage,
+    selectedType,
+    selectedGroup,
+    sendGroupMessage,
+  } = useChatStore();
   const { socket, authUser } = useAuthStore();
   const {
     subscribeToBlockingOrUnblockingEvent,
@@ -33,11 +39,11 @@ const SendMessageInput = () => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    subscribeToBlockingOrUnblockingEvent();
+    if (selectedType === "users") subscribeToBlockingOrUnblockingEvent();
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
-      unsubscribeFromBlockingOrUnblockingEvent();
+      if (selectedType === "users") unsubscribeFromBlockingOrUnblockingEvent();
     };
   }, []);
 
@@ -47,38 +53,58 @@ const SendMessageInput = () => {
   }, [selectedUser]);
 
   const handleMessageTyping = (e) => {
-    if (selectedUser.blockedUsers.includes(authUser._id)) return;
+    if (
+      selectedType === "users" &&
+      selectedUser.blockedUsers.includes(authUser._id)
+    )
+      return;
     setText(e.target.value);
-    socket.emit("typing", selectedUser._id);
-    if (timeout) {
-      clearTimeout(timeout);
+    if (selectedType === "users") {
+      socket.emit("typing", selectedUser._id);
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+      timeout = setTimeout(() => {
+        socket.emit("stop-typing", selectedUser._id);
+      }, TIME_DELAY);
     }
-    timeout = setTimeout(() => {
-      socket.emit("stop-typing", selectedUser._id);
-    }, TIME_DELAY);
   };
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    if (selectedUser.blockedUsers.includes(authUser._id)) return;
-    console.log("Blocked users", selectedUser.blockedUsers);
+    if (
+      selectedType === "users" &&
+      selectedUser.blockedUsers.includes(authUser._id)
+    )
+      return;
     if (!text.trim() && !image) {
       setText("");
       setImage(null);
       return;
     }
-    sendMessage({
-      text: text.trim(),
-      image: image,
-    });
+    if (selectedType === "users")
+      sendMessage({
+        text: text.trim(),
+        image: image,
+      });
+    else
+      sendGroupMessage({
+        text: text.trim(),
+        image: image,
+      });
+
     setText("");
     setImage(null);
-    socket.emit("stop-typing", selectedUser._id);
+    if (selectedType === "users") socket.emit("stop-typing", selectedUser._id);
   };
 
   const handleToggleEmojiPicker = (e) => {
     e.preventDefault();
-    if (selectedUser.blockedUsers.includes(authUser._id)) return;
+    if (
+      selectedType === "users" &&
+      selectedUser.blockedUsers.includes(authUser._id)
+    )
+      return;
     setEmojiPickerOpen(!emojiPickerOpen);
   };
 
@@ -87,14 +113,22 @@ const SendMessageInput = () => {
   };
 
   const handleImageUpload = () => {
-    if (selectedUser.blockedUsers.includes(authUser._id)) return;
+    if (
+      selectedType === "users" &&
+      selectedUser.blockedUsers.includes(authUser._id)
+    )
+      return;
     if (imageUploadInputBoxRef) {
       imageUploadInputBoxRef.current.click();
     }
   };
 
   const loadImage = (e) => {
-    if (selectedUser.blockedUsers.includes(authUser._id)) return;
+    if (
+      selectedType === "users" &&
+      selectedUser.blockedUsers.includes(authUser._id)
+    )
+      return;
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);

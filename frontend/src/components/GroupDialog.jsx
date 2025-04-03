@@ -35,6 +35,7 @@ const GroupDialog = ({ open, onClose }) => {
   }, []);
 
   const handleImageUpload = () => {
+    if (!isAdmin) return;
     if (imageUploadInputBoxRef) {
       imageUploadInputBoxRef.current.click();
     }

@@ -77,6 +77,15 @@ export const useChatStore = create((set, get) => ({
     }
   },
 
+  getSearchedGroups: async (filter) => {
+    try {
+      const res = await axiosInstance.get(`/group/bulk?filter=${filter}`);
+      set({ groups: res.data.groups });
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  },
+
   setSelectedUser: (selectedUser) => {
     set({ selectedUser });
   },
@@ -99,12 +108,8 @@ export const useChatStore = create((set, get) => ({
   getMessages: async () => {
     try {
       set({ isMessagesLoading: true });
-      const { selectedUser, selectedType, selectedGroup } = get();
-      const res = await axiosInstance.get(
-        `/message/${
-          selectedType === "users" ? selectedUser._id : selectedGroup._id
-        }`
-      );
+      const { selectedUser } = get();
+      const res = await axiosInstance.get(`/message/${selectedUser._id}`);
       set({ messages: res.data.messages });
     } catch (error) {
       toast.error(error.response.data.message);
@@ -117,11 +122,19 @@ export const useChatStore = create((set, get) => ({
     try {
       const { socket } = useAuthStore.getState();
       if (!socket) return;
-      const { selectedUser } = get();
+      const { selectedType } = get();
       socket.on("newMessage", (message) => {
-        const isMessageSentFromSelectedUser =
-          message.senderId === selectedUser._id;
-        if (!isMessageSentFromSelectedUser) return;
+        if (selectedType === "users") {
+          const { selectedUser } = get();
+          const isMessageSentFromSelectedUser =
+            message.senderId === selectedUser._id;
+          if (!isMessageSentFromSelectedUser) return;
+        } else {
+          const { selectedGroup } = get();
+          const isMessageSentInSelectedGroup =
+            message.groupId === selectedGroup._id;
+          if (!isMessageSentInSelectedGroup) return;
+        }
         const { messages } = get();
         set({ messages: [...messages, message] });
       });
@@ -136,7 +149,7 @@ export const useChatStore = create((set, get) => ({
       if (!authUser || !socket) return;
       socket.off("newMessage");
     } catch (error) {
-      console.log(`Failed subscribing to messages`);
+      console.log(`Failed unsubscribing to messages`);
     }
   },
 
@@ -245,6 +258,32 @@ export const useChatStore = create((set, get) => ({
       toast.error(error.response.data.message);
     } finally {
       set({ isExitingGroup: false });
+    }
+  },
+
+  sendGroupMessage: async (messageData) => {
+    try {
+      const { selectedGroup, messages } = get();
+      const res = await axiosInstance.post(
+        `/group/send/${selectedGroup._id}`,
+        messageData
+      );
+      set({ messages: [...messages, res.data.message] });
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  },
+
+  getGroupMessages: async () => {
+    try {
+      set({ isMessagesLoading: true });
+      const { selectedGroup } = get();
+      const res = await axiosInstance.get(`/group/send/${selectedGroup._id}`);
+      set({ messages: res.data.messages });
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+      set({ isMessagesLoading: false });
     }
   },
 }));

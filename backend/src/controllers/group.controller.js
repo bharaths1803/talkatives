@@ -1,6 +1,6 @@
 import User from "../models/user.model.js";
 import cloudinary from "../lib/cloudinary.js";
-import Group from "../models/group.models.js";
+import Group from "../models/group.model.js";
 import Message from "../models/message.model.js";
 import { io } from "../lib/socket.js";
 
@@ -113,15 +113,18 @@ export const addMembers = async (req, res) => {
   }
 };
 
-export const getMessages = async (req, res) => {
+export const getGroupMessages = async (req, res) => {
   try {
     const { groupId } = req.params;
     const messages = await Message.find({
       groupId,
+    }).populate({
+      path: "senderId",
+      select: "-password",
     });
     res.status(201).json({ messages });
   } catch (error) {
-    console.log(`Error in get messages controller`);
+    console.log(`Error in get group messages controller`);
     res.status(500).json({ message: `Internal server error` });
   }
 };
@@ -136,17 +139,20 @@ export const sendGroupMessage = async (req, res) => {
       imageUrl = result.secure_url;
     }
     const senderId = req.user._id;
-    const message = await Message.create({
+    const mes = await Message.create({
       senderId,
       groupId,
       text,
       imageUrl,
     });
-    await message.save();
+    const message = await Message.findById(mes._id).populate({
+      path: "senderId",
+      select: "-password",
+    });
     io.to(groupId).emit("newMessage", message);
     res.status(200).json({ message });
   } catch (error) {
-    console.log(`Error in send messages controller`);
+    console.log(`Error in send group messages controller`);
     res.status(500).json({ message: `Internal server error` });
   }
 };
@@ -250,5 +256,37 @@ export const exitGroup = async (req, res) => {
   } catch (error) {
     console.log("Error in exit group controlller", error);
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getSearchedGroups = async (req, res) => {
+  try {
+    const { filter = "" } = req.query;
+    const loggedinUserId = req.user._id;
+    const user = await User.findById(loggedinUserId);
+    const userGroups = user.groups;
+    const groups = await Group.find({
+      $and: [
+        { groupname: { $regex: new RegExp(filter, "i") } },
+        { _id: { $in: userGroups } },
+      ],
+    }).populate([
+      {
+        path: "members",
+        select: "-password",
+      },
+      {
+        path: "createdBy",
+        select: "-password",
+      },
+      {
+        path: "admins",
+        select: "-password",
+      },
+    ]);
+    res.status(201).json({ groups });
+  } catch (error) {
+    console.log(`Error in get searched users controller ${error}`);
+    res.status(500).json({ message: `Internal server error` });
   }
 };
